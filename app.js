@@ -143,6 +143,16 @@ function zipDownload(req, res, qo) {
 }
 
 function sendDir(req, res, qo) {
+    if (!fs.existsSync(rootFolder)) {
+        fs.mkdir(rootFolder, { recursive: true }, (error) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Root file created");
+            }
+        });
+    }
+    
     fs.promises.readdir(rootFolder + qo.path)
         .then(files => {
             res.setHeader('Content-Type', 'text');
