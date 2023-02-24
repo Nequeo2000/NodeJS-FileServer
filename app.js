@@ -3,7 +3,7 @@ const url = require("url");
 const fs = require("fs");
 const { exec } = require("child_process");
 
-const {getIPv4Address} = require("./getLocalAddress");
+const { getIPv4Address } = require("./getLocalAddress");
 
 const hostname = getIPv4Address();
 const port = 8080;
@@ -145,18 +145,14 @@ function zipDownload(req, res, qo) {
 function sendDir(req, res, qo) {
     if (!fs.existsSync(rootFolder)) {
         fs.mkdir(rootFolder, { recursive: true }, (error) => {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Root file created");
-            }
+            if (error) {console.log(error);}
         });
     }
-    
+
     fs.promises.readdir(rootFolder + qo.path)
         .then(files => {
             res.setHeader('Content-Type', 'text');
-            res.write(files.toString());
+            res.write( JSON.stringify(files) );
             res.end();
         })
         .catch(err => console.log(err));
