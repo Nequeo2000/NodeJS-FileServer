@@ -95,7 +95,7 @@ function updatePage() { // dir = /folderName
 
     fetch(url, { method: "GET" })
         .then(promise => promise.text())
-        .then(data => data.split(","))
+        .then(data => JSON.parse(data))
         .then(fileNames => {
             createFileElements(fileNames);
         })
