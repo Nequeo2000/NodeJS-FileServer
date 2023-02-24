@@ -1,3 +1,3 @@
-# NodeJs-FileServer
+# NodeJS-FileServer
 
-A NodeJS cloud storage server
+A NodeJS cloud file storage server
