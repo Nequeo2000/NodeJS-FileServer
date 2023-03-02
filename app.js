@@ -25,7 +25,8 @@ const server = http.createServer((req, res) => {
                 res.end();
             });
         }
-        else if (req.url == "/index.css" || req.url == "/index.js") {
+        else if (req.url == "/index.css" 
+        || req.url == "/index.js") {
             fs.readFile("." + req.url, null, function (error, data) {
                 res.setHeader('Content-Type', 'text');
                 res.write(data.toString());
@@ -49,7 +50,15 @@ server.listen(port, hostname, () => {
 });
 
 function handleGetRequest(req, res, qo) {
-    if (req.url.substring(0, 6) == "/video") {
+    if( req.url == "/file.png"
+    || req.url == "/folder.png"){
+        fs.readFile("." + req.url, null, function (error, data) {
+            res.setHeader('Content-Type', 'image/png');
+            res.write(data);
+            res.end();
+        });
+    }
+    else if (req.url.substring(0, 6) == "/video") {
         streamFile(req, res, qo);
     }
     else if (req.url.substring(0, 4) == "/dir") {
