@@ -62,9 +62,16 @@ function createFileElements(fileNames) {
         let fileType = fileName.toLowerCase().split(".")[1];
         let element = document.createElement("div");
         element.className = "file";
-        element.innerHTML = fileName;
         document.getElementsByClassName("Main")[0].appendChild(element);
 
+
+        let p = document.createElement("p");
+        p.innerText = fileName;
+        element.appendChild(p);
+        let img = document.createElement("img");
+        img.src = "./file.png";
+        element.appendChild(img);
+        
         if (fileType == "mp4") {
             element.onclick = () => {
                 let videoDisplay = document.getElementById("videoDisplay");
@@ -73,6 +80,7 @@ function createFileElements(fileNames) {
             };
         }
         else if (fileType == undefined) {
+            img.src = "./folder.png";
             element.onclick = () => {
                 currDir.push("/" + fileName);
                 updatePage();
