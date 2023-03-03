@@ -60,39 +60,66 @@ function createFileElements(fileNames) {
     for (let i = 0; i < fileNames.length; i++) {
         let fileName = fileNames[i];
         let fileType = fileName.toLowerCase().split(".")[1];
-        let element = document.createElement("div");
-        element.className = "file";
-        document.getElementsByClassName("Main")[0].appendChild(element);
 
-
-        let p = document.createElement("p");
-        p.innerText = fileName;
-        element.appendChild(p);
-        let img = document.createElement("img");
-        img.src = "./file.png";
-        element.appendChild(img);
-        
-        if (fileType == "mp4") {
-            element.onclick = () => {
-                let videoDisplay = document.getElementById("videoDisplay");
-                let src = window.location.href + "video/?path=/" + getCurrentDirectory() + "/" + fileName;
-                videoDisplay.src = src;
-            };
-        }
-        else if (fileType == undefined) {
-            img.src = "./folder.png";
-            element.onclick = () => {
-                currDir.push("/" + fileName);
-                updatePage();
-            };
+        if (fileType == undefined) {
+            createFolder(fileName);
         }
         else {
-            element.onclick = () => {
-                let a = document.createElement("a");
-                a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
-                a.download = fileName;
-                a.click();
-            }
+            createFile(fileName, fileType);
+        }
+    }
+}
+
+function createFolder(fileName) {
+    let element = document.createElement("div");
+    element.className = "file";
+    document.getElementsByClassName("Main")[0].appendChild(element);
+
+    let p = document.createElement("p");
+    let img = document.createElement("img");
+    p.innerText = fileName;
+    img.src = "./folder.png";
+    element.appendChild(p);
+    element.appendChild(img);
+
+    element.onclick = () => {
+        currDir.push("/" + fileName);
+        updatePage();
+    };
+}
+
+function createFile(fileName, fileType) {
+    let element = document.createElement("div");
+    element.className = "file";
+    document.getElementsByClassName("Main")[0].appendChild(element);
+
+    let p = document.createElement("p");
+    let img = document.createElement("img");
+    p.innerText = fileName;
+    img.src = "./file.png";
+    element.appendChild(p);
+    element.appendChild(img);
+
+    let buttonColumn = document.createElement("div");
+    let downloadBtn = document.createElement("button");
+    buttonColumn.className = "buttonColumn";
+    downloadBtn.innerText = "Download";
+    buttonColumn.appendChild(downloadBtn);
+    element.appendChild(buttonColumn);
+
+    if (fileType == "mp4") {
+        element.onclick = () => {
+            let videoDisplay = document.getElementById("videoDisplay");
+            let src = window.location.href + "video/?path=/" + getCurrentDirectory() + "/" + fileName;
+            videoDisplay.src = src;
+        };
+    }
+    else {
+        element.onclick = () => {
+            let a = document.createElement("a");
+            a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+            a.download = fileName;
+            a.click();
         }
     }
 }
