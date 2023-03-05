@@ -1,14 +1,13 @@
 const http = require('http');
 const url = require("url");
 const fs = require("fs");
-const { exec } = require("child_process");
 
 const { getIPv4Address } = require("./getLocalAddress");
 
 const hostname = getIPv4Address();
 const port = 8080;
 
-const rootFolder = "./_data_";
+const rootFolder = "../_data_";
 
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
@@ -51,7 +50,8 @@ server.listen(port, hostname, () => {
 
 function handleGetRequest(req, res, qo) {
     if( req.url == "/file.png"
-    || req.url == "/folder.png"){
+    || req.url == "/folder.png"
+    || req.url == "/favicon.ico"){
         fs.readFile("." + req.url, null, function (error, data) {
             res.setHeader('Content-Type', 'image/png');
             res.write(data);
@@ -100,7 +100,7 @@ function downloadFromServer(req, res, qo) {
     let filePath = rootFolder + qo.path;
     let file = fs.statSync(filePath);
 
-    res.setHeader('Content-Type', '');
+    //res.setHeader('Content-Type', '');
     res.setHeader('Content-Length', file.size);
 
     let readStream = fs.createReadStream(filePath, { highWaterMark: 1000 * 1024 });
@@ -110,45 +110,20 @@ function downloadFromServer(req, res, qo) {
 }
 
 function uploadToServer(req, res, qo) {
-    console.log("UPLOAD : " + qo.filename);
+    let fileName = req.headers["filename"];
+    console.log("UPLOAD : " + fileName);
 
     req.on('data', (chunk) => {
-        fs.writeFileSync(`${rootFolder}${qo.path}${qo.filename}`, chunk, { flag: 'a' }, (err) => {
+        fs.writeFileSync(`${rootFolder}${qo.path}${fileName}`, chunk, { flag: 'a' }, (err) => {
             if (err) { console.log(err); }
-            else { console.log("UPLOADING : " + qo.filename); }
+            else { console.log("UPLOADING : " + fileName); }
         });
     });
 
     req.on('end', () => {
-        console.log("UPLOADED : " + qo.filename);
+        console.log("UPLOADED : " + fileName);
         res.end();
     });
-}
-
-function zipDownload(req, res, qo) {
-    let filePath = rootFolder + qo.path;
-
-    if (filePath.indexOf(".") == -1) {
-        zipPath = filePath.substring(0, filePath.length - 1) + ".zip";
-
-        exec(`zip -1 -r "${zipPath}" "${filePath}"`, (error, stdout, stderr) => {
-            if (error || stderr) {
-                console.log(`error in zipDownload() : ${error.message ? error : stderr}`);
-                return;
-            }
-
-            filePath = zipPath;
-            let file = fs.statSync(filePath);
-
-            res.setHeader('Content-Type', 'file');
-            res.setHeader('Content-Length', file.size);
-
-            let readStream = fs.createReadStream(filePath, { highWaterMark: 1000 * 1024 });
-            readStream.pipe(res);
-
-            console.log("ZIPED : " + filePath);
-        });
-    }
 }
 
 function sendDir(req, res, qo) {

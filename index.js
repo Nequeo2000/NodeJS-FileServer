@@ -9,11 +9,11 @@ let currDir = [];
 fileSelect.onchange = async () => {
     let files = fileSelect.files;
     let makeReq = async function (file) {
-        let url = rootURL + "fileupload/?filename=/" + file.name;
-        url += "&path=/" + getCurrentDirectory();
+        let url = rootURL + "fileupload/?&path=/" + getCurrentDirectory();
 
         let req = new XMLHttpRequest();
         req.open("POST", url, false);
+        req.setRequestHeader("filename",file.name);
         await req.send(file);
     };
 
@@ -27,11 +27,11 @@ hideDisplay.onclick = () => {
 
     if (p.innerHTML == "Hide Display") {
         p.innerHTML = "Open Display";
-        document.getElementById("videoDisplay").hidden = true;
+        document.getElementById("displayArea").hidden = true;
     }
     else {
         p.innerHTML = "Hide Display";
-        document.getElementById("videoDisplay").hidden = false;
+        document.getElementById("displayArea").hidden = false;
     }
 }
 
@@ -88,6 +88,13 @@ function createFolder(fileName) {
     };
 }
 
+function downloadFile(fileName) {
+    let a = document.createElement("a");
+    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+    a.download = fileName;
+    a.click();
+}
+
 function createFile(fileName, fileType) {
     let element = document.createElement("div");
     element.className = "file";
@@ -104,23 +111,38 @@ function createFile(fileName, fileType) {
     let downloadBtn = document.createElement("button");
     buttonColumn.className = "buttonColumn";
     downloadBtn.innerText = "Download";
+    downloadBtn.onclick = () => downloadFile(fileName);
     buttonColumn.appendChild(downloadBtn);
     element.appendChild(buttonColumn);
 
     if (fileType == "mp4") {
         element.onclick = () => {
-            let videoDisplay = document.getElementById("videoDisplay");
-            let src = window.location.href + "video/?path=/" + getCurrentDirectory() + "/" + fileName;
-            videoDisplay.src = src;
+            let videoDisplay = document.createElement("video");
+            videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + fileName;
+            videoDisplay.autoplay = true;
+            videoDisplay.controls = true;
+
+            let displayArea = document.getElementById("displayArea");
+            displayArea.innerHTML = "";
+            displayArea.appendChild(videoDisplay);
         };
     }
-    else {
+    else if (fileType == "png"
+        || fileType == "jpeg"
+        || fileType == "jpg") {
         element.onclick = () => {
-            let a = document.createElement("a");
-            a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
-            a.download = fileName;
-            a.click();
-        }
+            let imageDisplay = document.createElement("img");
+            imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+
+            let displayArea = document.getElementById("displayArea");
+            displayArea.innerHTML = "";
+            displayArea.appendChild(imageDisplay);
+        };
+    }
+    else{
+        element.onclick = ()=>{
+            alert("Displaying this file type is not supported");
+        };
     }
 }
 

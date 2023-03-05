@@ -77,7 +77,7 @@ nav{
     background-color: gray;
 }
 
-.display video{
+.display video, img{
     width: 100%;
 }
 
