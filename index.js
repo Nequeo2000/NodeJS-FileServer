@@ -72,7 +72,7 @@ function createFileElements(fileNames) {
 
 function createFolder(fileName) {
     let element = document.createElement("div");
-    element.className = "file";
+    element.className = "folder";
     document.getElementsByClassName("Main")[0].appendChild(element);
 
     let p = document.createElement("p");
@@ -109,10 +109,10 @@ function createFile(fileName, fileType) {
 
     let buttonColumn = document.createElement("div");
     let downloadBtn = document.createElement("button");
-    buttonColumn.className = "buttonColumn";
-    downloadBtn.innerText = "Download";
-    downloadBtn.onclick = () => downloadFile(fileName);
+    buttonColumn.className = "buttonRow";
     buttonColumn.appendChild(downloadBtn);
+    downloadBtn.onclick = () => downloadFile(fileName);
+    downloadBtn.innerHTML = `<img src="./download.png">`;
     element.appendChild(buttonColumn);
 
     if (fileType == "mp4") {
@@ -141,7 +141,7 @@ function createFile(fileName, fileType) {
     }
     else{
         element.onclick = ()=>{
-            alert("Displaying this file type is not supported");
+            //alert("Displaying this file type is not supported");
         };
     }
 }

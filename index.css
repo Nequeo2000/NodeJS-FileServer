@@ -1,26 +1,78 @@
-body{
-    background-color: rgb(50,50,50);
+body {
+    background-color: rgb(50, 50, 50);
 }
 
-.main{
+.main {
     width: 100%;
-    height: auto;
-    
+    height: fit-content;
+
     margin-top: 8px;
     display: grid;
-    
+
     row-gap: 10px;
     --columnGap: 10px;
     column-gap: var(--columnGap);
-    --columnWidth: calc( calc(100%/3) - var(--columnGap)/2 );
+    --columnWidth: calc(calc(100%/3) - var(--columnGap)*0.7);
     grid-template-columns: repeat(3, var(--columnWidth));
 }
 
-.file{
-    background-color: rgb(100,100,100);
+nav {
+    top: 0;
+    left: 0;
+
+    margin-top: -8px;
+
+    background-color: rgb(30, 30, 30);
+    width: 100%;
+    height: auto;
+
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+}
+
+.navElementLeft,
+.navElementCenter,
+.navElementRight {
+    display: flex;
+}
+
+.hideDisplay,
+.upload {
+    width: 100%;
+    background-color: gray;
+}
+
+.display video,
+img {
+    width: 100%;
+}
+
+.backButton {
+    background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
     border-width: 5px;
+
+    width: 100%;
+    text-align: center;
+}
+
+.folder{
+    background-color: rgb(100, 100, 100);
+    border-radius: 10px;
+    border-color: black;
+
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 30% 70%;
+}
+
+.file{
+    background-color: rgb(100, 100, 100);
+    border-radius: 10px;
+    border-color: black;
 
     height: 100%;
     width: 100%;
@@ -29,64 +81,25 @@ body{
     grid-template-rows: 30% 50% 20%;
 }
 
-.file p{
+.file p, .folder p {
     width: 100%;
 
     text-align: center;
-    text-overflow: ellipsis;
+    text-overflow: clip;
     overflow: hidden;
 }
 
-.file img{
+.file img, .folder img{
     width: 100%;
 }
 
-.file .buttonColumn{
-    width: 100%;    
-
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-}
-
-.buttonColumn button{
-    background-color: gray;
-    text-align: center;
-    border-radius: 10px;
-}
-
-nav{
-    top: 0;
-    left: 0;
-    
-    margin-top: -8px;
-    
-    background-color: rgb(30,30,30);
-    width:100%;
-    height: auto;
-    
+.file .buttonRow {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-.navElementLeft,.navElementCenter,.navElementRight{
-    display: flex;
-}
-
-.hideDisplay, .upload {
-    width: 100%;
-    background-color: gray;
-}
-
-.display video, img{
-    width: 100%;
-}
-
-.backButton{
-    background-color: rgb(100,100,100);
+.buttonRow button,
+img {
+    background-color: rgb(100, 100, 100);
     border-radius: 10px;
-    border-color: black;
-    border-width: 5px;
-
-    width: 100%;
-    text-align: center;
 }

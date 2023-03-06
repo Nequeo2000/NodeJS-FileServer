@@ -51,7 +51,9 @@ server.listen(port, hostname, () => {
 function handleGetRequest(req, res, qo) {
     if( req.url == "/file.png"
     || req.url == "/folder.png"
-    || req.url == "/favicon.ico"){
+    || req.url == "/favicon.ico"
+    || req.url == "/download.png"
+    || req.url == "/upload.png"){
         fs.readFile("." + req.url, null, function (error, data) {
             res.setHeader('Content-Type', 'image/png');
             res.write(data);
