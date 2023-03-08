@@ -38,8 +38,8 @@ nav {
 
 .hideDisplay,
 .upload {
+    background-color: rgb(100, 100, 100);
     width: 100%;
-    background-color: gray;
 }
 
 .display video,
@@ -47,29 +47,16 @@ img {
     width: 100%;
 }
 
-.backButton {
-    background-color: rgb(100, 100, 100);
-    border-radius: 10px;
-    border-color: black;
-    border-width: 5px;
-
-    width: 100%;
-    text-align: center;
-}
-
-.folder{
+.folder {
     background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
 
     height: 100%;
     width: 100%;
-
-    display: grid;
-    grid-template-rows: 30% 70%;
 }
 
-.file{
+.file {
     background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
@@ -81,7 +68,8 @@ img {
     grid-template-rows: 30% 50% 20%;
 }
 
-.file p, .folder p {
+.file p,
+.folder p {
     width: 100%;
 
     text-align: center;
@@ -89,7 +77,8 @@ img {
     overflow: hidden;
 }
 
-.file img, .folder img{
+.file img,
+.folder img {
     width: 100%;
 }
 

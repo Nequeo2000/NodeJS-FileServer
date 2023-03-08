@@ -2,7 +2,6 @@ let rootURL = window.location.href;
 let fileSelect = document.getElementById("select");
 let hideDisplay = document.getElementById("hideDisplay");
 let upload = document.getElementsByClassName("upload")[0];
-let backButton = document.getElementById("backButton");
 
 let currDir = [];
 
@@ -13,7 +12,7 @@ fileSelect.onchange = async () => {
 
         let req = new XMLHttpRequest();
         req.open("POST", url, false);
-        req.setRequestHeader("filename",file.name);
+        req.setRequestHeader("filename", file.name);
         await req.send(file);
     };
 
@@ -39,13 +38,6 @@ upload.onclick = () => {
     fileSelect.click();
 };
 
-backButton.onclick = () => {
-    if (currDir.length > 0) {
-        currDir.pop();
-        updatePage();
-    }
-};
-
 function getCurrentDirectory() {
     let str = "";
     for (let i = 0; i < currDir.length; i++) {
@@ -56,6 +48,15 @@ function getCurrentDirectory() {
 
 function createFileElements(fileNames) {
     document.getElementsByClassName("Main")[0].innerHTML = "";
+
+    if( currDir.length > 0 ){
+        let backBtn = createFolder("Back");
+        backBtn.onclick = ()=>{
+            currDir.pop();
+            updatePage();
+        };
+        backBtn.children[1].src = "./back.png";
+    }
 
     for (let i = 0; i < fileNames.length; i++) {
         let fileName = fileNames[i];
@@ -86,13 +87,8 @@ function createFolder(fileName) {
         currDir.push("/" + fileName);
         updatePage();
     };
-}
 
-function downloadFile(fileName) {
-    let a = document.createElement("a");
-    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
-    a.download = fileName;
-    a.click();
+    return element;
 }
 
 function createFile(fileName, fileType) {
@@ -111,7 +107,7 @@ function createFile(fileName, fileType) {
     let downloadBtn = document.createElement("button");
     buttonColumn.className = "buttonRow";
     buttonColumn.appendChild(downloadBtn);
-    downloadBtn.onclick = () => downloadFile(fileName);
+    downloadBtn.onclick = () => downloadFile(event, fileName);
     downloadBtn.innerHTML = `<img src="./download.png">`;
     element.appendChild(buttonColumn);
 
@@ -125,6 +121,10 @@ function createFile(fileName, fileType) {
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
             displayArea.appendChild(videoDisplay);
+            
+            if(displayArea.hidden == true){
+                document.getElementById("hideDisplay").click();
+            }
         };
     }
     else if (fileType == "png"
@@ -137,13 +137,26 @@ function createFile(fileName, fileType) {
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
             displayArea.appendChild(imageDisplay);
+
+            if(displayArea.hidden == true){
+                document.getElementById("hideDisplay").click();
+            }
         };
     }
-    else{
-        element.onclick = ()=>{
-            //alert("Displaying this file type is not supported");
+    else {
+        element.onclick = () => {
+            alert("Displaying this file type is not supported");
         };
     }
+}
+
+function downloadFile(event, fileName) {
+    let a = document.createElement("a");
+    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+    a.download = fileName;
+    a.click();
+
+    event.stopPropagation();
 }
 
 function updatePage() { // dir = /folderName
