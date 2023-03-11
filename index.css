@@ -2,6 +2,10 @@ body {
     background-color: rgb(50, 50, 50);
 }
 
+button{
+    cursor: pointer;
+}
+
 .main {
     width: 100%;
     height: fit-content;
@@ -14,9 +18,6 @@ body {
 }
 
 nav {
-    top: 0;
-    left: 0;
-
     margin-top: -8px;
 
     background-color: rgb(30, 30, 30);
@@ -33,19 +34,43 @@ nav {
     display: flex;
 }
 
-.navElementRight img{
+.navElementRight img {
     width: 100%;
 }
 
-.hideDisplay,
 .upload {
     background-color: rgb(100, 100, 100);
     width: 100%;
 }
 
-.display video,
-.display img {
+.displayContainer {
+    text-align: center;
+}
+
+.toggleDisplay {
+    position: absolute;
+    inset: 0px;
+    width: 0px;
+    height: 0px;
+}
+
+.displayArea video,
+.displayArea img {
     width: 100%;
+}
+
+.toggleLabel .toggleLabelImage{
+    width: 10%;
+}
+
+.toggleDisplay:checked ~ .toggleLabel .toggleLabelImage {
+    transform: rotate(180deg);
+}
+
+.toggleDisplay:checked ~ .displayArea {
+    height: 0;
+    transition: height 1s ease-in-out;
+    visibility: hidden;
 }
 
 .folder {

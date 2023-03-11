@@ -1,6 +1,6 @@
 let rootURL = window.location.href;
 let fileSelect = document.getElementById("select");
-let hideDisplay = document.getElementById("hideDisplay");
+let toggleDisplay = document.getElementById("toggleDisplay");
 let upload = document.getElementsByClassName("upload")[0];
 
 let currDir = [];
@@ -18,19 +18,6 @@ fileSelect.onchange = async () => {
 
     for (let i = 0; i < files.length; i++) {
         makeReq(files[i]);
-    }
-}
-
-hideDisplay.onclick = () => {
-    let p = hideDisplay.children[0];
-
-    if (p.innerHTML == "Hide Display") {
-        p.innerHTML = "Open Display";
-        document.getElementById("displayArea").hidden = true;
-    }
-    else {
-        p.innerHTML = "Hide Display";
-        document.getElementById("displayArea").hidden = false;
     }
 }
 
@@ -121,10 +108,6 @@ function createFile(fileName, fileType) {
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
             displayArea.appendChild(videoDisplay);
-            
-            if(displayArea.hidden == true){
-                document.getElementById("hideDisplay").click();
-            }
         };
     }
     else if (fileType == "png"
@@ -137,10 +120,6 @@ function createFile(fileName, fileType) {
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
             displayArea.appendChild(imageDisplay);
-
-            if(displayArea.hidden == true){
-                document.getElementById("hideDisplay").click();
-            }
         };
     }
     else {

@@ -9,9 +9,6 @@
 <body>
 	<nav>
 		<div class="navElementLeft">
-			<button class="hideDisplay" id="hideDisplay">
-				<p>Open Display</p>
-			</button>
 		</div>
 		<div class="navElementCenter">
 		</div>
@@ -21,8 +18,14 @@
 			</button>
 		</div>
 	</nav>
-	<div class="display" id="displayArea" hidden>
-		
+	<div class="displayContainer">
+		<input type="checkbox" class="toggleDisplay" id="toggleDisplay">
+		<div class="displayArea" id="displayArea">
+			
+		</div>
+		<label class="toggleLabel" for="toggleDisplay">
+			<img class="toggleLabelImage" src="./triangle.png">
+		</label>
 	</div>
 	<div class="main"></div>
 	<input type="file" name="" id="select" hidden multiple>
