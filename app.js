@@ -139,6 +139,7 @@ function sendDir(req, res, qo) {
 
     fs.promises.readdir(rootFolder + qo.path)
         .then(files => {
+            console.log(files);
             res.setHeader('Content-Type', 'text');
             res.write( JSON.stringify(files) );
             res.end();
