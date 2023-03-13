@@ -114,7 +114,7 @@ function downloadFromServer(req, res, qo) {
 }
 
 function uploadToServer(req, res, qo) {
-    let fileName = req.headers["filename"];
+    let fileName = qo.filename;
     console.log("UPLOAD : " + fileName);
 
     req.on('data', (chunk) => {
@@ -139,7 +139,6 @@ function sendDir(req, res, qo) {
 
     fs.promises.readdir(rootFolder + qo.path)
         .then(files => {
-            console.log(files);
             res.setHeader('Content-Type', 'text');
             res.write( JSON.stringify(files) );
             res.end();

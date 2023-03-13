@@ -8,11 +8,11 @@ let currDir = [];
 fileSelect.onchange = async () => {
     let files = fileSelect.files;
     let makeReq = async function (file) {
-        let url = rootURL + "fileupload/?&path=/" + getCurrentDirectory();
+        let url = rootURL + "fileupload/?filename=/" + file.name;
+        url += "&path=/" + getCurrentDirectory();
 
         let req = new XMLHttpRequest();
         req.open("POST", url, false);
-        req.setRequestHeader("filename", file.name);
         await req.send(file);
     };
 
