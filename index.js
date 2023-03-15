@@ -16,6 +16,17 @@ fileSelect.onchange = async () => {
         await req.send(file);
     };
 
+    let notUsableFilenames = [];
+    for (let i = 0; i < files.length; i++) {
+        if( files[i].name.indexOf("&") != -1 ){
+            notUsableFilenames.push(files[i].name);
+        }
+    }
+    if( notUsableFilenames.length > 0 ){
+        alert("filenames : "+notUsableFilenames+" contains unusable characters");
+        return;
+    }
+
     for (let i = 0; i < files.length; i++) {
         makeReq(files[i]);
     }
