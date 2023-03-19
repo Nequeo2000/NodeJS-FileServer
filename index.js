@@ -18,12 +18,12 @@ fileSelect.onchange = async () => {
 
     let notUsableFilenames = [];
     for (let i = 0; i < files.length; i++) {
-        if( files[i].name.indexOf("&") != -1 ){
+        if (files[i].name.indexOf("&") != -1) {
             notUsableFilenames.push(files[i].name);
         }
     }
-    if( notUsableFilenames.length > 0 ){
-        alert("filenames : "+notUsableFilenames+" contains unusable characters");
+    if (notUsableFilenames.length > 0) {
+        alert("filenames : " + notUsableFilenames + " contains unusable characters");
         return;
     }
 
@@ -47,9 +47,9 @@ function getCurrentDirectory() {
 function createFileElements(fileNames) {
     document.getElementsByClassName("Main")[0].innerHTML = "";
 
-    if( currDir.length > 0 ){
+    if (currDir.length > 0) {
         let backBtn = createFolder("Back");
-        backBtn.onclick = ()=>{
+        backBtn.onclick = () => {
             currDir.pop();
             updatePage();
         };
@@ -109,7 +109,9 @@ function createFile(fileName, fileType) {
     downloadBtn.innerHTML = `<img src="./download.png">`;
     element.appendChild(buttonColumn);
 
-    if (fileType == "mp4") {
+    if (fileType == "mp4"
+        || fileType == "ogg"
+        || fileType == "webm") {
         element.onclick = () => {
             let videoDisplay = document.createElement("video");
             videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + fileName;
@@ -121,9 +123,17 @@ function createFile(fileName, fileType) {
             displayArea.appendChild(videoDisplay);
         };
     }
-    else if (fileType == "png"
+    else if (fileType == "apng"
+        || fileType == "gif"
+        || fileType == "ico"
+        || fileType == "cur"
+        || fileType == "jpg"
         || fileType == "jpeg"
-        || fileType == "jpg") {
+        || fileType == "jfif"
+        || fileType == "pipeg"
+        || fileType == "pjp"
+        || fileType == "png"
+        || fileType == "svg") {
         element.onclick = () => {
             let imageDisplay = document.createElement("img");
             imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
@@ -131,6 +141,34 @@ function createFile(fileName, fileType) {
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
             displayArea.appendChild(imageDisplay);
+        };
+    }
+    else if (fileType == "mp3"
+        || fileType == "wav") {
+        element.onclick = () => {
+            let audioDisplay = document.createElement("audio");
+            audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+            audioDisplay.controls = true;
+            audioDisplay.autoplay = true;
+
+            let displayArea = document.getElementById("displayArea");
+            displayArea.innerHTML = "";
+            displayArea.appendChild(audioDisplay);
+        };
+    }
+    else if (fileType == "pdf"
+        || fileType == "txt"
+        || fileType == "py"
+        || fileType == "java"
+        || fileType == "css"
+        || fileType == "js") {
+        element.onclick = () => {
+            let pdfDisplay = document.createElement("iframe");
+            pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+
+            let displayArea = document.getElementById("displayArea");
+            displayArea.innerHTML = "";
+            displayArea.appendChild(pdfDisplay);
         };
     }
     else {
@@ -149,7 +187,7 @@ function downloadFile(event, fileName) {
     event.stopPropagation();
 }
 
-function updatePage() { // dir = /folderName
+function updatePage() {
     let currentDirectory = getCurrentDirectory();
     let url = rootURL + "dir/?path=" + currentDirectory;
 

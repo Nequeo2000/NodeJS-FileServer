@@ -6,6 +6,11 @@ button{
     cursor: pointer;
 }
 
+iframe{
+    height: 50%;
+    border: none;
+}
+
 .main {
     width: 100%;
 
@@ -65,7 +70,9 @@ nav {
 }
 
 .displayArea video,
-.displayArea img {
+.displayArea img,
+.displayArea audio,
+.displayArea iframe {
     width: 100%;
 }
 
