@@ -24,8 +24,8 @@ const server = http.createServer((req, res) => {
                 res.end();
             });
         }
-        else if (req.url == "/index.css" 
-        || req.url == "/index.js") {
+        else if (req.url == "/index.css"
+            || req.url == "/index.js") {
             fs.readFile("." + req.url, null, function (error, data) {
                 res.setHeader('Content-Type', 'text');
                 res.write(data.toString());
@@ -41,6 +41,9 @@ const server = http.createServer((req, res) => {
         if (req.url.substring(0, 11) == "/fileupload") {
             uploadToServer(req, res, qo);
         }
+        else if (req.url.substring(0,10) == "/newFolder"){
+            createNewFolder(req, res, qo);
+        }
     }
 });
 
@@ -49,13 +52,14 @@ server.listen(port, hostname, () => {
 });
 
 function handleGetRequest(req, res, qo) {
-    if( req.url == "/file.png"
-    || req.url == "/folder.png"
-    || req.url == "/favicon.ico"
-    || req.url == "/download.png"
-    || req.url == "/upload.png"
-    || req.url == "/back.png"
-    || req.url == "/triangle.png"){
+    if (req.url == "/file.png"
+        || req.url == "/folder.png"
+        || req.url == "/favicon.ico"
+        || req.url == "/download.png"
+        || req.url == "/upload.png"
+        || req.url == "/back.png"
+        || req.url == "/triangle.png"
+        || req.url == "/add.png") {
         fs.readFile("." + req.url, null, function (error, data) {
             res.setHeader('Content-Type', 'image/png');
             res.write(data);
@@ -130,17 +134,27 @@ function uploadToServer(req, res, qo) {
     });
 }
 
+function createNewFolder(req, res, qo){
+    let folderPath = rootFolder + qo.path + "/" + qo.foldername;
+    fs.mkdir(folderPath, { recursive: false }, (err) =>{
+        console.error("error while creating folder\n"+err);
+        return;
+    });
+
+    console.log("created folder : "+folderPath);
+}
+
 function sendDir(req, res, qo) {
     if (!fs.existsSync(rootFolder)) {
         fs.mkdir(rootFolder, { recursive: true }, (error) => {
-            if (error) {console.log(error);}
+            if (error) { console.log(error); }
         });
     }
 
     fs.promises.readdir(rootFolder + qo.path)
         .then(files => {
             res.setHeader('Content-Type', 'text');
-            res.write( JSON.stringify(files) );
+            res.write(JSON.stringify(files));
             res.end();
         })
         .catch(err => console.log(err));

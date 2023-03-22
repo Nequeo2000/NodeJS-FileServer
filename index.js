@@ -2,6 +2,7 @@ let rootURL = window.location.href;
 let fileSelect = document.getElementById("select");
 let toggleDisplay = document.getElementById("toggleDisplay");
 let upload = document.getElementsByClassName("upload")[0];
+let newFolder = document.getElementsByClassName("newFolder")[0];
 
 let currDir = [];
 
@@ -35,6 +36,38 @@ fileSelect.onchange = async () => {
 upload.onclick = () => {
     fileSelect.click();
 };
+
+newFolder.onclick = () => {
+    let folderName = prompt("folder name");
+
+    // if no name given, return
+    if( folderName == null ){
+        return;
+    }
+
+    // check for illegal characters
+    if( folderName.indexOf("&") != -1
+    || folderName.indexOf(".") != -1 ){
+        alert("this name contains unusable characters ('.','&')")
+        return;
+    }
+
+    // check for already existing foldernames
+    let folderNames = document.getElementsByClassName("folder");
+    for(let i=0;i<folderNames.length;i++){
+        let alreadyUsed = folderNames[i].children[0].innerText;
+        if( alreadyUsed == folderName ){
+            alert("a folder with this name already exists");
+            return;
+        }
+    }
+
+    let url = rootURL + "newFolder/?path=" + getCurrentDirectory();
+    url += "&foldername="+folderName;
+    fetch(url, { method: "POST" })
+        .catch(err => console.log(err));
+    updatePage();    
+}
 
 function getCurrentDirectory() {
     let str = "";
@@ -72,6 +105,7 @@ function createFileElements(fileNames) {
 function createFolder(fileName) {
     let element = document.createElement("div");
     element.className = "folder";
+    element.tabIndex = 0;
     document.getElementsByClassName("Main")[0].appendChild(element);
 
     let p = document.createElement("p");
@@ -92,6 +126,7 @@ function createFolder(fileName) {
 function createFile(fileName, fileType) {
     let element = document.createElement("div");
     element.className = "file";
+    element.tabIndex = 0;
     document.getElementsByClassName("Main")[0].appendChild(element);
 
     let p = document.createElement("p");

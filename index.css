@@ -2,11 +2,11 @@ body {
     background-color: rgb(50, 50, 50);
 }
 
-button{
+button {
     cursor: pointer;
 }
 
-iframe{
+iframe {
     height: 50%;
     border: none;
 }
@@ -26,10 +26,10 @@ nav {
 
     background-color: rgb(30, 30, 30);
     width: 100%;
-    height: fit-content;
+    height: 50px;
 
     border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 19px;
+    border-bottom-right-radius: 10px;
 
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;
@@ -38,24 +38,33 @@ nav {
 .navElementLeft,
 .navElementCenter,
 .navElementRight {
-    height: 100%;
+    height: inherit;
     margin-left: 10px;
     margin-right: 10px;
 }
 
-.navElementRight .upload {
-    width: 100%;
-    height: 100%;
-}
-
-.upload img{
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.upload {
+.navElementLeft .newFolder{
     background-color: rgb(100, 100, 100);
-    width: 100%;
+    padding: 0;
+    border: none;
+}
+
+.newFolder,
+.newFolder img{
+    height: inherit;
+    border-radius: 10px;
+}
+
+.navElementRight .upload {
+    background-color: rgb(100, 100, 100);
+    padding: 0;
+    border: none;
+}
+
+.upload,
+.upload img {
+    height: inherit;
+    border-radius: 10px;
 }
 
 .displayContainer {
@@ -76,24 +85,29 @@ nav {
     width: 100%;
 }
 
-.toggleLabel .toggleLabelImage{
-    width: 10%;
+.toggleLabel .toggleLabelImage {
+    width: 50px;
 }
 
-.toggleDisplay:checked ~ .toggleLabel .toggleLabelImage {
+.toggleDisplay:checked~.toggleLabel .toggleLabelImage {
     transform: rotate(180deg);
 }
 
-.toggleDisplay:checked ~ .displayArea {
+.toggleDisplay:checked~.displayArea {
     height: 0;
     transition: height 1s ease-in-out;
     visibility: hidden;
+}
+
+.toggleLabelImage {
+    cursor: pointer;
 }
 
 .folder {
     background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
+    cursor: pointer;
 
     height: 100%;
     width: 100%;
@@ -106,6 +120,7 @@ nav {
     background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
+    cursor: pointer;
 
     height: 100%;
     width: 100%;
