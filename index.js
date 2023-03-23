@@ -17,6 +17,7 @@ fileSelect.onchange = async () => {
         await req.send(file);
     };
 
+    // check for not usable filenames
     let notUsableFilenames = [];
     for (let i = 0; i < files.length; i++) {
         if (files[i].name.indexOf("&") != -1) {
