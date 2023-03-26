@@ -137,13 +137,13 @@ function createFile(fileName, fileType) {
     element.appendChild(p);
     element.appendChild(img);
 
-    let buttonColumn = document.createElement("div");
+    let buttonRow = document.createElement("div");
     let downloadBtn = document.createElement("button");
-    buttonColumn.className = "buttonRow";
-    buttonColumn.appendChild(downloadBtn);
+    buttonRow.className = "buttonRow";
+    buttonRow.appendChild(downloadBtn);
     downloadBtn.onclick = () => downloadFile(event, fileName);
     downloadBtn.innerHTML = `<img src="./download.png">`;
-    element.appendChild(buttonColumn);
+    element.appendChild(buttonRow);
 
     if (fileType == "mp4"
         || fileType == "ogg"

@@ -38,6 +38,7 @@ nav {
 .navElementLeft,
 .navElementCenter,
 .navElementRight {
+    position: relative;
     height: inherit;
     margin-left: 10px;
     margin-right: 10px;
@@ -53,10 +54,6 @@ nav {
 .newFolder img {
     height: inherit;
     border-radius: 10px;
-}
-
-.navElementRight {
-    position: relative;
 }
 
 .navElementRight .upload {
@@ -78,7 +75,7 @@ nav {
     text-align: center;
 }
 
-.toggleDisplay {
+.toggle {
     position: absolute;
     inset: 0px;
     width: 0px;
