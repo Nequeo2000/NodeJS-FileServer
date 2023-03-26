@@ -43,22 +43,29 @@ nav {
     margin-right: 10px;
 }
 
-.navElementLeft .newFolder{
+.navElementLeft .newFolder {
     background-color: rgb(100, 100, 100);
     padding: 0;
     border: none;
 }
 
 .newFolder,
-.newFolder img{
+.newFolder img {
     height: inherit;
     border-radius: 10px;
+}
+
+.navElementRight {
+    position: relative;
 }
 
 .navElementRight .upload {
     background-color: rgb(100, 100, 100);
     padding: 0;
     border: none;
+
+    position: absolute;
+    right: 0px;
 }
 
 .upload,
