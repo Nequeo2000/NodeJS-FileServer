@@ -42,32 +42,32 @@ newFolder.onclick = () => {
     let folderName = prompt("folder name");
 
     // if no name given, return
-    if( folderName == null ){
+    if (folderName == null) {
         return;
     }
 
     // check for illegal characters
-    if( folderName.indexOf("&") != -1
-    || folderName.indexOf(".") != -1 ){
+    if (folderName.indexOf("&") != -1
+        || folderName.indexOf(".") != -1) {
         alert("this name contains unusable characters ('.','&')")
         return;
     }
 
     // check for already existing foldernames
     let folderNames = document.getElementsByClassName("folder");
-    for(let i=0;i<folderNames.length;i++){
+    for (let i = 0; i < folderNames.length; i++) {
         let alreadyUsed = folderNames[i].children[0].innerText;
-        if( alreadyUsed == folderName ){
+        if (alreadyUsed == folderName) {
             alert("a folder with this name already exists");
             return;
         }
     }
 
     let url = rootURL + "newFolder/?path=" + getCurrentDirectory();
-    url += "&foldername="+folderName;
+    url += "&foldername=" + folderName;
     fetch(url, { method: "POST" })
         .catch(err => console.log(err));
-    updatePage();    
+    updatePage();
 }
 
 function getCurrentDirectory() {
@@ -137,14 +137,36 @@ function createFile(fileName, fileType) {
     element.appendChild(p);
     element.appendChild(img);
 
+    // create buttonRow element including buttons and their functions
     let buttonRow = document.createElement("div");
-    let downloadBtn = document.createElement("button");
     buttonRow.className = "buttonRow";
-    buttonRow.appendChild(downloadBtn);
-    downloadBtn.onclick = () => downloadFile(event, fileName);
-    downloadBtn.innerHTML = `<img src="./download.png">`;
     element.appendChild(buttonRow);
 
+    let checkbox = document.createElement("input");
+    checkbox.tabIndex = -1;
+    checkbox.type = "checkbox";
+    checkbox.className = "toggle";
+    checkbox.id = fileName;
+    checkbox.onclick = (event) => { event.stopPropagation(); };
+    buttonRow.appendChild(checkbox);
+
+    let optionsLabel = document.createElement("label");
+    optionsLabel.tabIndex = 0;
+    optionsLabel.className = "optionsLabel";
+    optionsLabel.innerHTML = `
+        <img src="./options.png"></img>
+        <div class="optionsDisplay"></div>
+    `;
+    optionsLabel.htmlFor = fileName;
+    optionsLabel.onclick = (event) => { event.stopPropagation(); };
+    buttonRow.appendChild(optionsLabel);
+
+    let downloadBtn = document.createElement("button");
+    downloadBtn.onclick = () => downloadFile(event, fileName);
+    downloadBtn.innerHTML = "Download";
+    optionsLabel.children[1].appendChild(downloadBtn);
+        
+    // give onclick functions according to filetype
     if (fileType == "mp4"
         || fileType == "ogg"
         || fileType == "webm") {

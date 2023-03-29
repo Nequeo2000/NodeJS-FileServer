@@ -55,7 +55,7 @@ function handleGetRequest(req, res, qo) {
     if (req.url == "/file.png"
         || req.url == "/folder.png"
         || req.url == "/favicon.ico"
-        || req.url == "/download.png"
+        || req.url == "/options.png"
         || req.url == "/upload.png"
         || req.url == "/back.png"
         || req.url == "/triangle.png"
