@@ -38,12 +38,7 @@ const server = http.createServer((req, res) => {
     }
     else if (req.method == "POST") // handle POST requests
     {
-        if (req.url.substring(0, 11) == "/fileupload") {
-            uploadToServer(req, res, qo);
-        }
-        else if (req.url.substring(0,10) == "/newFolder"){
-            createNewFolder(req, res, qo);
-        }
+        handlePostRequest(req, res, qo);
     }
 });
 
@@ -77,6 +72,21 @@ function handleGetRequest(req, res, qo) {
     }
     else if (req.url.substring(0, 4) == "/zip") {
         zipDownload(req, res, qo);
+    }
+}
+
+function handlePostRequest(req, res, qo) {
+    if (req.url.substring(0, 11) == "/fileupload") {
+        uploadToServer(req, res, qo);
+    }
+    else if (req.url.substring(0, 7) == "/rename") {
+        renameFile(req, res, qo);
+    }
+    else if (req.url.substring(0, 7) == "/delete") {
+        deleteFile(req, res, qo);
+    }
+    else if (req.url.substring(0, 10) == "/newFolder") {
+        createNewFolder(req, res, qo);
     }
 }
 
@@ -118,30 +128,62 @@ function downloadFromServer(req, res, qo) {
 }
 
 function uploadToServer(req, res, qo) {
-    let fileName = qo.filename;
-    console.log("UPLOAD : " + fileName);
+    let filename = qo.filename;
+    console.log("UPLOAD : " + filename);
 
     req.on('data', (chunk) => {
-        fs.writeFileSync(`${rootFolder}${qo.path}${fileName}`, chunk, { flag: 'a' }, (err) => {
+        fs.writeFileSync(`${rootFolder}${qo.path}${filename}`, chunk, { flag: 'a' }, (err) => {
             if (err) { console.log(err); }
-            else { console.log("UPLOADING : " + fileName); }
+            else { console.log("UPLOADING : " + filename); }
         });
     });
 
     req.on('end', () => {
-        console.log("UPLOADED : " + fileName);
+        console.log("UPLOADED : " + filename);
         res.end();
     });
 }
 
-function createNewFolder(req, res, qo){
+function renameFile(req, res, qo) {
+    let path = qo.path;
+    let filename = qo.filename;
+    let newFilename = qo.newFilename;
+
+    let oldPath = rootFolder + path + "/" + filename;
+    let newPath = rootFolder + path + "/" + newFilename;
+
+    fs.rename(oldPath, newPath, (error) => {
+        if (error) {
+            console.log(error);
+            return;
+        };
+        console.log("RENAME : " + filename + " TO : " + newFilename);
+        res.end();
+    });
+}
+
+function deleteFile(req, res, qo) {
+    let path = qo.path;
+    let filename = qo.filename;
+
+    fs.unlink(rootFolder + path + "/" + filename, (error) => {
+        if (error) {
+            console.log(error);
+            return;
+        };
+        console.log('DLETED : ' + path + "/" + filename);
+        res.end();
+    });
+}
+
+function createNewFolder(req, res, qo) {
     let folderPath = rootFolder + qo.path + "/" + qo.foldername;
-    fs.mkdir(folderPath, { recursive: false }, (err) =>{
-        console.error("error while creating folder\n"+err);
+    fs.mkdir(folderPath, { recursive: false }, (err) => {
+        console.error("error while creating folder\n" + err);
         return;
     });
 
-    console.log("created folder : "+folderPath);
+    console.log("created folder : " + folderPath);
 }
 
 function sendDir(req, res, qo) {

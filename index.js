@@ -20,12 +20,12 @@ fileSelect.onchange = async () => {
     // check for not usable filenames
     let notUsableFilenames = [];
     for (let i = 0; i < files.length; i++) {
-        if (files[i].name.indexOf("&") != -1) {
+        if (!approveFilename(files[i].name)) {
             notUsableFilenames.push(files[i].name);
         }
     }
     if (notUsableFilenames.length > 0) {
-        alert("filenames : " + notUsableFilenames + " contains unusable characters");
+        alert("Filenames : " + notUsableFilenames + " contains unusable characters");
         return;
     }
 
@@ -49,7 +49,7 @@ newFolder.onclick = () => {
     // check for illegal characters
     if (folderName.indexOf("&") != -1
         || folderName.indexOf(".") != -1) {
-        alert("this name contains unusable characters ('.','&')")
+        alert("This name contains unusable characters ('.','&')")
         return;
     }
 
@@ -58,7 +58,7 @@ newFolder.onclick = () => {
     for (let i = 0; i < folderNames.length; i++) {
         let alreadyUsed = folderNames[i].children[0].innerText;
         if (alreadyUsed == folderName) {
-            alert("a folder with this name already exists");
+            alert("A folder with this name already exists");
             return;
         }
     }
@@ -164,8 +164,18 @@ function createFile(fileName, fileType) {
     let downloadBtn = document.createElement("button");
     downloadBtn.onclick = () => downloadFile(event, fileName);
     downloadBtn.innerHTML = "Download";
-    optionsLabel.children[1].appendChild(downloadBtn);
-        
+    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(downloadBtn);
+
+    let renameBtn = document.createElement("button");
+    renameBtn.onclick = () => renameFile(event, fileName);
+    renameBtn.innerHTML = "Rename";
+    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
+
+    let deleteBtn = document.createElement("button");
+    deleteBtn.onclick = () => deletFile(event, fileName);
+    deleteBtn.innerHTML = "Delete";
+    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
+
     // give onclick functions according to filetype
     if (fileType == "mp4"
         || fileType == "ogg"
@@ -236,6 +246,14 @@ function createFile(fileName, fileType) {
     }
 }
 
+function approveFilename(filename) {
+    if (filename.indexOf("&") != -1
+        || filename.indexOf(".") == -1) {
+        return false;
+    }
+    return true;
+}
+
 function downloadFile(event, fileName) {
     let a = document.createElement("a");
     a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
@@ -243,6 +261,37 @@ function downloadFile(event, fileName) {
     a.click();
 
     event.stopPropagation();
+}
+
+function renameFile(event, filename) {
+    let newFilename = prompt("Give new filename");
+    let path = getCurrentDirectory();
+    if (!approveFilename(newFilename)) {
+        alert("The new filename is not a valid filename")
+        return;
+    }
+
+    let url = "./rename/?path=" + path;
+    url += "&filename=" + filename;
+    url += "&newFilename=" + newFilename;
+
+    fetch(url, { method: "POST" })
+        .then(() => { updatePage() })
+        .catch(error => console.log(error));
+}
+
+function deletFile(event, filename) {
+    let path = getCurrentDirectory();
+
+    let url = "./delete/?path=" + path;
+    url += "&filename=" + filename;
+
+    fetch(url, { method: "POST" })
+        .then(() => {
+            alert("successfully deleted the file");
+            updatePage();
+        })
+        .catch((error) => alert("something went wrong"));
 }
 
 function updatePage() {
