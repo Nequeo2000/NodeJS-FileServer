@@ -15,6 +15,7 @@ fileSelect.onchange = async () => {
         let req = new XMLHttpRequest();
         req.open("POST", url, false);
         await req.send(file);
+        updatePage();
     };
 
     // check for not usable filenames
