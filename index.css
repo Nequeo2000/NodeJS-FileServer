@@ -11,16 +11,6 @@ iframe {
     border: none;
 }
 
-.main {
-    width: 100%;
-
-    margin-top: 8px;
-    display: grid;
-
-    gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-}
-
 nav {
     margin-top: -8px;
 
@@ -107,7 +97,17 @@ nav {
     cursor: pointer;
 }
 
-.folder {
+.fileList {
+    width: 100%;
+
+    margin-top: 8px;
+    display: grid;
+
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+
+.listElement {
     background-color: rgb(100, 100, 100);
     border-radius: 10px;
     border-color: black;
@@ -118,47 +118,28 @@ nav {
 
     display: grid;
     grid-template-rows: 1fr 2fr;
+    position: relative;
 }
 
-.file {
-    background-color: rgb(100, 100, 100);
-    border-radius: 10px;
-    border-color: black;
-    cursor: pointer;
-
-    height: 100%;
-    width: 100%;
-
-    display: grid;
-    grid-template-rows: 1fr 3fr 1fr;
-}
-
-.file p,
-.folder p {
+.listElement p {
     width: 100%;
     max-height: 2.5em;
     margin: 0px;
 
     text-align: center;
     text-overflow: clip;
-    overflow: hidden;
 }
 
-.file img,
-.folder img {
+.listElement img {
     width: 100%;
 }
 
-.file .buttonRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.buttonRow label {
-    text-align: center;
-    background-color: rgb(100, 100, 100);
-    border-radius: 10px;
-    box-shadow: 1px 0px 1px 1px;
+.listElement label {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    width: 100%;
+    height: 10%;
 }
 
 input~.optionsLabel .optionsDisplay {
@@ -167,22 +148,29 @@ input~.optionsLabel .optionsDisplay {
 }
 
 input:checked~.optionsLabel .optionsDisplay {
-    width: fit-content;
+    width: 100%;
     height: fit-content;
 }
 
-.optionsLabel{
+.optionsLabel {
+    cursor: pointer;
     position: relative;
 }
 
-.optionsDisplay{
+.optionsLabel img {
+    height: 100%;
+    width: auto;
+}
+
+.optionsDisplay {
     position: absolute;
     overflow: hidden;
     top: 100%;
     border-radius: 10px;
+    z-index: 1;
 }
 
-.optionsDisplay button{
+.optionsDisplay button {
     background-color: rgb(100, 100, 100);
     width: 100%;
 }

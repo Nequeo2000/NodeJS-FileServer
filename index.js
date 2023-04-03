@@ -80,7 +80,7 @@ function getCurrentDirectory() {
 }
 
 function createFileElements(fileNames) {
-    document.getElementsByClassName("Main")[0].innerHTML = "";
+    document.getElementsByClassName("fileList")[0].innerHTML = "";
 
     if (currDir.length > 0) {
         let backBtn = createFolder("Back");
@@ -106,9 +106,9 @@ function createFileElements(fileNames) {
 
 function createFolder(fileName) {
     let element = document.createElement("div");
-    element.className = "folder";
+    element.className = "listElement folder";
     element.tabIndex = 0;
-    document.getElementsByClassName("Main")[0].appendChild(element);
+    document.getElementsByClassName("fileList")[0].appendChild(element);
 
     let p = document.createElement("p");
     let img = document.createElement("img");
@@ -127,9 +127,9 @@ function createFolder(fileName) {
 
 function createFile(fileName, fileType) {
     let element = document.createElement("div");
-    element.className = "file";
+    element.className = "listElement file";
     element.tabIndex = 0;
-    document.getElementsByClassName("Main")[0].appendChild(element);
+    document.getElementsByClassName("fileList")[0].appendChild(element);
 
     let p = document.createElement("p");
     let img = document.createElement("img");
@@ -138,18 +138,13 @@ function createFile(fileName, fileType) {
     element.appendChild(p);
     element.appendChild(img);
 
-    // create buttonRow element including buttons and their functions
-    let buttonRow = document.createElement("div");
-    buttonRow.className = "buttonRow";
-    element.appendChild(buttonRow);
-
     let checkbox = document.createElement("input");
     checkbox.tabIndex = -1;
     checkbox.type = "checkbox";
     checkbox.className = "toggle";
     checkbox.id = fileName;
     checkbox.onclick = (event) => { event.stopPropagation(); };
-    buttonRow.appendChild(checkbox);
+    element.appendChild(checkbox);
 
     let optionsLabel = document.createElement("label");
     optionsLabel.tabIndex = 0;
@@ -160,7 +155,7 @@ function createFile(fileName, fileType) {
     `;
     optionsLabel.htmlFor = fileName;
     optionsLabel.onclick = (event) => { event.stopPropagation(); };
-    buttonRow.appendChild(optionsLabel);
+    element.appendChild(optionsLabel);
 
     let downloadBtn = document.createElement("button");
     downloadBtn.onclick = () => downloadFile(event, fileName);
