@@ -24,7 +24,6 @@ Not finished
 - implement functionality to delete and move folders and files
 - downloading folders as a dynamically created zip archive
 - visualization for upload/download progress
-    - automatic refresh after successful upload
 
 ## Installation
 
