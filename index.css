@@ -123,11 +123,12 @@ nav {
 
 .listElement p {
     width: 100%;
+    max-width: 100%;
     max-height: 2.5em;
     margin: 0px;
 
     text-align: center;
-    text-overflow: clip;
+    overflow: hidden;
 }
 
 .listElement img {
