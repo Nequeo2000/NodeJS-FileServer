@@ -166,7 +166,7 @@ function deleteFile(req, res, qo) {
     let path = qo.path;
     let filename = qo.filename;
 
-    fs.unlink(rootFolder + path + "/" + filename, (error) => {
+    fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
         if (error) {
             console.log(error);
             return;

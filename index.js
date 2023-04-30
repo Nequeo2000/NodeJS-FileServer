@@ -117,6 +117,35 @@ function createFolder(fileName) {
     element.appendChild(p);
     element.appendChild(img);
 
+    let checkbox = document.createElement("input");
+    checkbox.tabIndex = -1;
+    checkbox.type = "checkbox";
+    checkbox.className = "toggle";
+    checkbox.id = fileName;
+    checkbox.onclick = (event) => { event.stopPropagation(); };
+    element.appendChild(checkbox);
+
+    let optionsLabel = document.createElement("label");
+    optionsLabel.tabIndex = 0;
+    optionsLabel.className = "optionsLabel";
+    optionsLabel.innerHTML = `
+        <img src="./options.png"></img>
+        <div class="optionsDisplay"></div>
+    `;
+    optionsLabel.htmlFor = fileName;
+    optionsLabel.onclick = (event) => { event.stopPropagation(); };
+    element.appendChild(optionsLabel);
+
+    let renameBtn = document.createElement("button");
+    renameBtn.onclick = () => renameFolder(event, fileName);
+    renameBtn.innerHTML = "Rename";
+    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
+
+    let deleteBtn = document.createElement("button");
+    deleteBtn.onclick = () => deletFile(event, fileName);
+    deleteBtn.innerHTML = "Delete";
+    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
+
     element.onclick = () => {
         currDir.push("/" + fileName);
         updatePage();
@@ -240,6 +269,32 @@ function createFile(fileName, fileType) {
             alert("Displaying this file type is not supported");
         };
     }
+}
+
+function approveFoldername(foldername){
+    if (foldername.indexOf("&") != -1
+        || foldername.indexOf(".") != -1) {
+        alert("This name contains unusable characters ('.','&')")
+        return false;
+    }
+    return true
+}
+
+function renameFolder(event, foldername){
+    let newFoldername = prompt("Give new filename");
+    let path = "/"+getCurrentDirectory();
+    if (!approveFoldername(newFoldername)) {
+        alert("The new foldername is not a valid foldername")
+        return;
+    }
+
+    let url = "./rename/?path=" + path;
+    url += "&filename=" + foldername;
+    url += "&newFilename=" + newFoldername;
+
+    fetch(url, { method: "POST" })
+        .then(() => { updatePage() })
+        .catch(error => console.log(error));
 }
 
 function approveFilename(filename) {
