@@ -15,13 +15,14 @@ Not finished
 - displaying of a variety of image file types
 - displaying of .txt and pdf files
 - automatic indentification of servers local ip address 
+- delete, rename files and folders
 
 **To be done:**
 - removing server side security problems
 - user authentication
     - user authorisation
 - implement a search functionality
-- implement functionality to delete and move folders and files
+- implement functionality to move folders and files
 - downloading folders as a dynamically created zip archive
 - visualization for upload/download progress
 

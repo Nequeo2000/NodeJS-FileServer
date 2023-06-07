@@ -166,14 +166,29 @@ function deleteFile(req, res, qo) {
     let path = qo.path;
     let filename = qo.filename;
 
-    fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
-        if (error) {
-            console.log(error);
-            return;
-        };
-        console.log('DLETED : ' + path + "/" + filename);
-        res.end();
-    });
+    console.log(path);
+    if( path == "/trash" ){
+        fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
+            if (error) {
+                console.log(error);
+                return;
+            };
+            console.log('DELETED : ' + path + "/" + filename);
+            res.end();
+        });
+    } else {
+        let oldPath = rootFolder + path + "/" + filename;
+        let newPath = rootFolder + "/trash/" + filename;
+        
+        fs.rename(oldPath, newPath, (error) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            console.log("MOVED : " + oldPath + " TO : " + newPath);
+            res.end();
+        });
+    }
 }
 
 function createNewFolder(req, res, qo) {

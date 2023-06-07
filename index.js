@@ -276,6 +276,9 @@ function approveFoldername(foldername){
         || foldername.indexOf(".") != -1) {
         alert("This name contains unusable characters ('.','&')")
         return false;
+    } else if(foldername == "trash"){
+        alert("This folder name is reserved and cannot be used");
+        return false;
     }
     return true
 }
@@ -332,17 +335,18 @@ function renameFile(event, filename) {
 }
 
 function deletFile(event, filename) {
-    let path = getCurrentDirectory();
+    if( confirm("Thsi file/folder will be deleted!") ){
+        let path = getCurrentDirectory();
 
-    let url = "./delete/?path=" + path;
-    url += "&filename=" + filename;
+        let url = "./delete/?path=" + path;
+        url += "&filename=" + filename;
 
-    fetch(url, { method: "POST" })
-        .then(() => {
-            alert("successfully deleted the file");
-            updatePage();
-        })
-        .catch((error) => alert("something went wrong"));
+        fetch(url, { method: "POST" })
+            .then(() => {
+                updatePage();
+            })
+            .catch((error) => alert("something went wrong"));
+    }
 }
 
 function updatePage() {
