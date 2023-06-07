@@ -55,7 +55,7 @@ function handleGetRequest(req, res, qo) {
         || req.url == "/back.png"
         || req.url == "/triangle.png"
         || req.url == "/add.png") {
-        fs.readFile("." + req.url, null, function (error, data) {
+        fs.readFile("./images/" + req.url, null, function (error, data) {
             res.setHeader('Content-Type', 'image/png');
             res.write(data);
             res.end();
