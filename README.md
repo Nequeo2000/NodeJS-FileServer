@@ -2,7 +2,7 @@
 
 A NodeJS cloud storage file server
 
-Build with NodeJS only, no npm packages used
+Build with NodeJS v18.17.1. only, no npm packages used
 
 ## Status
 
@@ -18,12 +18,10 @@ Not finished
 - delete, rename files and folders
 
 **To be done:**
-- removing server side security problems
 - user authentication
     - user authorisation
 - implement a search functionality
 - implement functionality to move folders and files
-- downloading folders as a dynamically created zip archive
 - visualization for upload/download progress
 
 ## Installation
