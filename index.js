@@ -335,7 +335,7 @@ function renameFile(event, filename) {
 }
 
 function deletFile(event, filename) {
-    if( confirm("Thsi file/folder will be deleted!") ){
+    if( confirm("This file/folder will be deleted!") ){
         let path = getCurrentDirectory();
 
         let url = "./delete/?path=" + path;

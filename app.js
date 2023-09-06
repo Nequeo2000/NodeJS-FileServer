@@ -62,16 +62,13 @@ function handleGetRequest(req, res, qo) {
         });
     }
     else if (req.url.substring(0, 6) == "/video") {
-        streamFile(req, res, qo);
+        streamVideoFile(req, res, qo);
     }
     else if (req.url.substring(0, 4) == "/dir") {
         sendDir(req, res, qo);
     }
     else if (req.url.substring(0, 7) == "/_data_") {
         downloadFromServer(req, res, qo);
-    }
-    else if (req.url.substring(0, 4) == "/zip") {
-        zipDownload(req, res, qo);
     }
 }
 
@@ -90,7 +87,7 @@ function handlePostRequest(req, res, qo) {
     }
 }
 
-function streamFile(req, res, qo) {
+function streamVideoFile(req, res, qo) {
     let range = req.headers.range;
     let fileSize = fs.statSync(rootFolder + qo.path).size;
 
@@ -118,7 +115,6 @@ function downloadFromServer(req, res, qo) {
     let filePath = rootFolder + qo.path;
     let file = fs.statSync(filePath);
 
-    //res.setHeader('Content-Type', '');
     res.setHeader('Content-Length', file.size);
 
     let readStream = fs.createReadStream(filePath, { highWaterMark: 1000 * 1024 });
@@ -166,29 +162,14 @@ function deleteFile(req, res, qo) {
     let path = qo.path;
     let filename = qo.filename;
 
-    console.log(path);
-    if( path == "/trash" ){
-        fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
-            if (error) {
-                console.log(error);
-                return;
-            };
-            console.log('DELETED : ' + path + "/" + filename);
-            res.end();
-        });
-    } else {
-        let oldPath = rootFolder + path + "/" + filename;
-        let newPath = rootFolder + "/trash/" + filename;
-        
-        fs.rename(oldPath, newPath, (error) => {
-            if (error) {
-                console.log(error);
-                return;
-            }
-            console.log("MOVED : " + oldPath + " TO : " + newPath);
-            res.end();
-        });
-    }
+    fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
+        if (error) {
+            console.log(error);
+            return;
+        };
+        console.log('DELETED : ' + path + "/" + filename);
+        res.end();
+    });
 }
 
 function createNewFolder(req, res, qo) {
