@@ -3,7 +3,9 @@ body {
 }
 
 button {
-    cursor: pointer;
+    cursor: pointer;    
+    border-color: black;
+    color: black;
 }
 
 iframe {
