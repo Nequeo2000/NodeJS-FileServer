@@ -1,0 +1,15 @@
+{
+    "name": "NodeJS-FileServer",
+    "short_name": "FileServer",
+    "icons": [
+        {
+            "src": "./folder.png",
+            "sizes": "500x500"
+        }
+    ],
+    "start_url": "./",
+    "id": "/",
+    "display": "standalone",
+    "theme_color": "rgb(50,50,50)",
+    "background_color": "rgb(30,30,30)"
+}
