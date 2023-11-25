@@ -118,6 +118,7 @@ nav {
 
     height: 100%;
     width: 100%;
+    overflow-wrap: break-word;
 
     display: grid;
     grid-template-rows: 1fr 2fr;
