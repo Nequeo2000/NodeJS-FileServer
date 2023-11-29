@@ -284,7 +284,7 @@ function approveFoldername(foldername){
 }
 
 function renameFolder(event, foldername){
-    let newFoldername = prompt("Give new filename");
+    let newFoldername = prompt("Give new filename", foldername);
     let path = "/"+getCurrentDirectory();
     if (!approveFoldername(newFoldername)) {
         alert("The new foldername is not a valid foldername")
@@ -308,17 +308,8 @@ function approveFilename(filename) {
     return true;
 }
 
-function downloadFile(event, fileName) {
-    let a = document.createElement("a");
-    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
-    a.download = fileName;
-    a.click();
-
-    event.stopPropagation();
-}
-
 function renameFile(event, filename) {
-    let newFilename = prompt("Give new filename");
+    let newFilename = prompt("Give new filename", filename);
     let path = getCurrentDirectory();
     if (!approveFilename(newFilename)) {
         alert("The new filename is not a valid filename")
@@ -332,6 +323,15 @@ function renameFile(event, filename) {
     fetch(url, { method: "POST" })
         .then(() => { updatePage() })
         .catch(error => console.log(error));
+}
+
+function downloadFile(event, filename) {
+    let a = document.createElement("a");
+    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileame;
+    a.download = filename;
+    a.click();
+
+    event.stopPropagation();
 }
 
 function deletFile(event, filename) {
