@@ -327,7 +327,8 @@ function renameFile(event, filename) {
 
 function downloadFile(event, filename) {
     let a = document.createElement("a");
-    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + fileame;
+    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
+    a.target = "_self";
     a.download = filename;
     a.click();
 
