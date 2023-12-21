@@ -1,14 +1,17 @@
 const { networkInterfaces } = require('os');
 
 function getIPv4Address() {
-    const nets = networkInterfaces()["wlp2s0"] || networkInterfaces()["eth0"];
-    const results = {}; // Or just '{}', an empty object
+    const net_list = networkInterfaces();
+    const results = {};
 
-    for (let index in nets) {
-        let netInfo = nets[index];
-        if (netInfo["family"] == "IPv4") {
-            return netInfo["address"];
-        }
+    for (let net_key in net_list){
+        let nets = net_list[net_key];
+        for (let index in nets) {
+            let netInfo = nets[index];
+            if (netInfo["family"] == "IPv4") {
+                return netInfo["address"];
+            }
+        }   
     }
 }
 
