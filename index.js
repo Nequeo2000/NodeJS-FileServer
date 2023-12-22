@@ -7,7 +7,7 @@ let progressBar = document.getElementById("progess");
 
 let currDir = [];
 
-fileSelect.onchange = async () => {
+fileSelect.onchange = () => {
     let files = fileSelect.files;
     let makeReq = function (file) {
         let url = rootURL + "fileupload/?filename=/" + file.name;
