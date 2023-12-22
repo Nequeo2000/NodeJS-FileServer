@@ -3,19 +3,32 @@ let fileSelect = document.getElementById("select");
 let toggleDisplay = document.getElementById("toggleDisplay");
 let upload = document.getElementsByClassName("upload")[0];
 let newFolder = document.getElementsByClassName("newFolder")[0];
+let progressBar = document.getElementById("progess");
 
 let currDir = [];
 
 fileSelect.onchange = async () => {
     let files = fileSelect.files;
-    let makeReq = async function (file) {
+    let makeReq = function (file) {
         let url = rootURL + "fileupload/?filename=/" + file.name;
         url += "&path=/" + getCurrentDirectory();
-
+        
         let req = new XMLHttpRequest();
-        req.open("POST", url, false);
-        await req.send(file);
-        updatePage();
+        req.upload.onloadstart = (event)=>{
+            progressBar.max = event.total;
+            progressBar.hidden = false;            
+        }
+        req.upload.onloadend = (event)=>{progressBar.hidden = true;}
+        req.upload.onprogress = (event)=>{
+            progressBar.value = event.loaded;
+            console.log(event);
+            updatePage();
+        };
+        req.upload.onabort = (event)=>{window.alert(event);}
+        req.upload.onerror = (event)=>{window.alert(event);}
+
+        req.open("POST", url, true);
+        req.send(file);
     };
 
     // check for not usable filenames

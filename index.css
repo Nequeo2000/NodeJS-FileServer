@@ -63,6 +63,15 @@ nav {
     border-radius: 10px;
 }
 
+.progressBar {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    color: white;
+    background-color: gray;
+}
+
 .displayContainer {
     text-align: center;
 }
