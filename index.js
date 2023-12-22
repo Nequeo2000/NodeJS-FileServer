@@ -10,6 +10,7 @@ let currDir = [];
 fileSelect.onchange = () => {
     let files = fileSelect.files;
     let makeReq = function (file) {
+        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()]/gi,""), {type: file.type});
         let url = rootURL + "fileupload/?filename=/" + file.name;
         url += "&path=/" + getCurrentDirectory();
         
@@ -21,27 +22,15 @@ fileSelect.onchange = () => {
         req.upload.onloadend = (event)=>{progressBar.hidden = true;}
         req.upload.onprogress = (event)=>{
             progressBar.value = event.loaded;
-            console.log(event);
             updatePage();
         };
         req.upload.onabort = (event)=>{window.alert(event);}
         req.upload.onerror = (event)=>{window.alert(event);}
 
+        alert(file.name);
         req.open("POST", url, true);
         req.send(file);
     };
-
-    // check for not usable filenames
-    let notUsableFilenames = [];
-    for (let i = 0; i < files.length; i++) {
-        if (!approveFilename(files[i].name)) {
-            notUsableFilenames.push(files[i].name);
-        }
-    }
-    if (notUsableFilenames.length > 0) {
-        alert("Filenames : " + notUsableFilenames + " contains unusable characters");
-        return;
-    }
 
     for (let i = 0; i < files.length; i++) {
         makeReq(files[i]);
@@ -53,32 +42,33 @@ upload.onclick = () => {
 };
 
 newFolder.onclick = () => {
-    let folderName = prompt("folder name");
+    let foldername = prompt("folder name");
+    foldername = foldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
 
     // if no name given, return
-    if (folderName == null) {
+    if (foldername == null) {
         return;
     }
 
     // check for illegal characters
-    if (folderName.indexOf("&") != -1
-        || folderName.indexOf(".") != -1) {
+    if (foldername.indexOf("&") != -1
+        || foldername.indexOf(".") != -1) {
         alert("This name contains unusable characters ('.','&')")
         return;
     }
 
     // check for already existing foldernames
-    let folderNames = document.getElementsByClassName("folder");
-    for (let i = 0; i < folderNames.length; i++) {
-        let alreadyUsed = folderNames[i].children[0].innerText;
-        if (alreadyUsed == folderName) {
+    let foldernames = document.getElementsByClassName("folder");
+    for (let i = 0; i < foldernames.length; i++) {
+        let alreadyUsed = foldernames[i].children[0].innerText;
+        if (alreadyUsed == foldername) {
             alert("A folder with this name already exists");
             return;
         }
     }
 
     let url = rootURL + "newFolder/?path=" + getCurrentDirectory();
-    url += "&foldername=" + folderName;
+    url += "&foldername=" + foldername;
     fetch(url, { method: "POST" })
         .catch(err => console.log(err));
     updatePage();
@@ -92,7 +82,7 @@ function getCurrentDirectory() {
     return str;
 }
 
-function createFileElements(fileNames) {
+function createFileElements(filenames) {
     document.getElementsByClassName("fileList")[0].innerHTML = "";
 
     if (currDir.length > 0) {
@@ -104,20 +94,20 @@ function createFileElements(fileNames) {
         backBtn.children[1].src = "./back.png";
     }
 
-    for (let i = 0; i < fileNames.length; i++) {
-        let fileName = fileNames[i];
-        let fileType = fileName.toLowerCase().split(".")[1];
+    for (let i = 0; i < filenames.length; i++) {
+        let filename = filenames[i];
+        let fileType = filename.toLowerCase().split(".")[1];
 
         if (fileType == undefined) {
-            createFolder(fileName);
+            createFolder(filename);
         }
         else {
-            createFile(fileName, fileType);
+            createFile(filename, fileType);
         }
     }
 }
 
-function createFolder(fileName) {
+function createFolder(foldername) {
     let element = document.createElement("div");
     element.className = "listElement folder";
     element.tabIndex = 0;
@@ -125,7 +115,7 @@ function createFolder(fileName) {
 
     let p = document.createElement("p");
     let img = document.createElement("img");
-    p.innerText = fileName;
+    p.innerText = foldername;
     img.src = "./folder.png";
     element.appendChild(p);
     element.appendChild(img);
@@ -134,7 +124,7 @@ function createFolder(fileName) {
     checkbox.tabIndex = -1;
     checkbox.type = "checkbox";
     checkbox.className = "toggle";
-    checkbox.id = fileName;
+    checkbox.id = foldername;
     checkbox.onclick = (event) => { event.stopPropagation(); };
     element.appendChild(checkbox);
 
@@ -145,29 +135,29 @@ function createFolder(fileName) {
         <img src="./options.png"></img>
         <div class="optionsDisplay"></div>
     `;
-    optionsLabel.htmlFor = fileName;
+    optionsLabel.htmlFor = foldername;
     optionsLabel.onclick = (event) => { event.stopPropagation(); };
     element.appendChild(optionsLabel);
 
     let renameBtn = document.createElement("button");
-    renameBtn.onclick = () => renameFolder(event, fileName);
+    renameBtn.onclick = () => renameFolder(event, foldername);
     renameBtn.innerHTML = "Rename";
     optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
 
     let deleteBtn = document.createElement("button");
-    deleteBtn.onclick = () => deletFile(event, fileName);
+    deleteBtn.onclick = () => deletFile(event, foldername);
     deleteBtn.innerHTML = "Delete";
     optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
 
     element.onclick = () => {
-        currDir.push("/" + fileName);
+        currDir.push("/" + foldername);
         updatePage();
     };
 
     return element;
 }
 
-function createFile(fileName, fileType) {
+function createFile(filename, fileType) {
     let element = document.createElement("div");
     element.className = "listElement file";
     element.tabIndex = 0;
@@ -175,7 +165,7 @@ function createFile(fileName, fileType) {
 
     let p = document.createElement("p");
     let img = document.createElement("img");
-    p.innerText = fileName;
+    p.innerText = filename;
     img.src = "./file.png";
     element.appendChild(p);
     element.appendChild(img);
@@ -184,7 +174,7 @@ function createFile(fileName, fileType) {
     checkbox.tabIndex = -1;
     checkbox.type = "checkbox";
     checkbox.className = "toggle";
-    checkbox.id = fileName;
+    checkbox.id = filename;
     checkbox.onclick = (event) => { event.stopPropagation(); };
     element.appendChild(checkbox);
 
@@ -195,22 +185,22 @@ function createFile(fileName, fileType) {
         <img src="./options.png"></img>
         <div class="optionsDisplay"></div>
     `;
-    optionsLabel.htmlFor = fileName;
+    optionsLabel.htmlFor = filename;
     optionsLabel.onclick = (event) => { event.stopPropagation(); };
     element.appendChild(optionsLabel);
 
     let downloadBtn = document.createElement("button");
-    downloadBtn.onclick = () => downloadFile(event, fileName);
+    downloadBtn.onclick = () => downloadFile(event, filename);
     downloadBtn.innerHTML = "Download";
     optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(downloadBtn);
 
     let renameBtn = document.createElement("button");
-    renameBtn.onclick = () => renameFile(event, fileName);
+    renameBtn.onclick = () => renameFile(event, filename);
     renameBtn.innerHTML = "Rename";
     optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
 
     let deleteBtn = document.createElement("button");
-    deleteBtn.onclick = () => deletFile(event, fileName);
+    deleteBtn.onclick = () => deletFile(event, filename);
     deleteBtn.innerHTML = "Delete";
     optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
 
@@ -220,7 +210,7 @@ function createFile(fileName, fileType) {
         || fileType == "webm") {
         element.onclick = () => {
             let videoDisplay = document.createElement("video");
-            videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + fileName;
+            videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + filename;
             videoDisplay.autoplay = true;
             videoDisplay.controls = true;
 
@@ -242,7 +232,7 @@ function createFile(fileName, fileType) {
         || fileType == "svg") {
         element.onclick = () => {
             let imageDisplay = document.createElement("img");
-            imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+            imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
 
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
@@ -253,7 +243,7 @@ function createFile(fileName, fileType) {
         || fileType == "wav") {
         element.onclick = () => {
             let audioDisplay = document.createElement("audio");
-            audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+            audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
             audioDisplay.controls = true;
             audioDisplay.autoplay = true;
 
@@ -270,7 +260,7 @@ function createFile(fileName, fileType) {
         || fileType == "js") {
         element.onclick = () => {
             let pdfDisplay = document.createElement("iframe");
-            pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + fileName;
+            pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
 
             let displayArea = document.getElementById("displayArea");
             displayArea.innerHTML = "";
@@ -284,25 +274,11 @@ function createFile(fileName, fileType) {
     }
 }
 
-function approveFoldername(foldername){
-    if (foldername.indexOf("&") != -1
-        || foldername.indexOf(".") != -1) {
-        alert("This name contains unusable characters ('.','&')")
-        return false;
-    } else if(foldername == "trash"){
-        alert("This folder name is reserved and cannot be used");
-        return false;
-    }
-    return true
-}
-
 function renameFolder(event, foldername){
     let newFoldername = prompt("Give new filename", foldername);
     let path = "/"+getCurrentDirectory();
-    if (!approveFoldername(newFoldername)) {
-        alert("The new foldername is not a valid foldername")
-        return;
-    }
+    
+    newFoldername = newFoldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
 
     let url = "./rename/?path=" + path;
     url += "&filename=" + foldername;
@@ -313,21 +289,11 @@ function renameFolder(event, foldername){
         .catch(error => console.log(error));
 }
 
-function approveFilename(filename) {
-    if (filename.indexOf("&") != -1
-        || filename.indexOf(".") == -1) {
-        return false;
-    }
-    return true;
-}
-
 function renameFile(event, filename) {
     let newFilename = prompt("Give new filename", filename);
     let path = getCurrentDirectory();
-    if (!approveFilename(newFilename)) {
-        alert("The new filename is not a valid filename")
-        return;
-    }
+        
+    newFilename = newFilename.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
 
     let url = "./rename/?path=" + path;
     url += "&filename=" + filename;
@@ -370,8 +336,8 @@ function updatePage() {
     fetch(url, { method: "GET" })
         .then(promise => promise.text())
         .then(data => JSON.parse(data))
-        .then(fileNames => {
-            createFileElements(fileNames);
+        .then(filenames => {
+            createFileElements(filenames);
         })
         .catch(err => console.log(err));
 }
