@@ -27,7 +27,6 @@ fileSelect.onchange = () => {
         req.upload.onabort = (event)=>{window.alert(event);}
         req.upload.onerror = (event)=>{window.alert(event);}
 
-        alert(file.name);
         req.open("POST", url, true);
         req.send(file);
     };
