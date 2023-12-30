@@ -129,7 +129,7 @@ function uploadToServer(req, res, qo) {
     console.log("UPLOAD : " + filename);
 
     req.on('data', (chunk) => {
-        fs.writeFileSync(`${rootFolder}${qo.path}${filename}`, chunk, { flag: 'a' }, (err) => {
+        fs.writeFile(`${rootFolder}${qo.path}${filename}`, chunk, { flag: 'a' }, (err) => {
             if (err) { console.log(err); }
             else { console.log("UPLOADING : " + filename); }
         });
