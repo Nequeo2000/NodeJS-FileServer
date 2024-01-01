@@ -126,17 +126,20 @@ function downloadFromServer(req, res, qo) {
 
 function uploadToServer(req, res, qo) {
     let filename = qo.filename;
+    let writeStream = fs.createWriteStream(`${rootFolder}${qo.path}${filename}`, { highWaterMark: 1000 * 1024 });
     console.log("UPLOAD : " + filename);
 
     req.on('data', (chunk) => {
-        fs.writeFile(`${rootFolder}${qo.path}${filename}`, chunk, { flag: 'a' }, (err) => {
-            if (err) { console.log(err); }
-            else { console.log("UPLOADING : " + filename); }
-        });
+        let highWaterMark = writeStream.write(chunk, () => { });
+
+        if (!highWaterMark) {
+            writeStream.once("drain", () => { });
+        }
     });
 
     req.on('end', () => {
         console.log("UPLOADED : " + filename);
+        writeStream.close();
         res.end();
     });
 }
