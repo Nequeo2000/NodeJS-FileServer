@@ -10,9 +10,9 @@ let currDir = [];
 fileSelect.onchange = () => {
     let files = fileSelect.files;
     let makeReq = function (file) {
-        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()]/gi, ""), { type: file.type });
+        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 .'()]/gi, ""), { type: file.type });
         let url = rootURL + "fileupload/?filename=/" + file.name;
-        url += "&path=/" + getCurrentDirectory();
+        url += "&path=" + getCurrentDirectory();
 
         let req = new XMLHttpRequest();
         req.timeout = 0;
