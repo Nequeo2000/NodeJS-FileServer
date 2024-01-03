@@ -10,22 +10,30 @@ let currDir = [];
 fileSelect.onchange = () => {
     let files = fileSelect.files;
     let makeReq = function (file) {
-        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()]/gi,""), {type: file.type});
+        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()]/gi, ""), { type: file.type });
         let url = rootURL + "fileupload/?filename=/" + file.name;
         url += "&path=/" + getCurrentDirectory();
-        
+
         let req = new XMLHttpRequest();
-        req.upload.onloadstart = (event)=>{
-            progressBar.max = event.total;
-            progressBar.hidden = false;            
+        req.upload.onloadstart = (event) => {
+            progressBar.max += event.total;
+            progressBar.hidden = false;
         }
-        req.upload.onloadend = (event)=>{progressBar.hidden = true;}
-        req.upload.onprogress = (event)=>{
-            progressBar.value = event.loaded;
-            updatePage();
+        req.upload.onloadend = (event) => {
+            if (progressBar.max == progressBar.value
+                && progressBar.hidden == false) {
+                progressBar.hidden = true;
+                updatePage();
+
+                progressBar.value = 0;
+                progressBar.max = 0;
+            }
+        }
+        req.upload.onprogress = (event) => {
+            progressBar.value += event.loaded;
         };
-        req.upload.onabort = (event)=>{window.alert(event);}
-        req.upload.onerror = (event)=>{window.alert(event);}
+        req.upload.onabort = (event) => { window.alert(event); }
+        req.upload.onerror = (event) => { window.alert(event); }
 
         req.open("POST", url, true);
         req.send(file);
@@ -42,7 +50,7 @@ upload.onclick = () => {
 
 newFolder.onclick = () => {
     let foldername = prompt("folder name");
-    foldername = foldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
+    foldername = foldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
 
     // if no name given, return
     if (foldername == null) {
@@ -273,11 +281,11 @@ function createFile(filename, fileType) {
     }
 }
 
-function renameFolder(event, foldername){
+function renameFolder(event, foldername) {
     let newFoldername = prompt("Give new filename", foldername);
-    let path = "/"+getCurrentDirectory();
-    
-    newFoldername = newFoldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
+    let path = "/" + getCurrentDirectory();
+
+    newFoldername = newFoldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
 
     let url = "./rename/?path=" + path;
     url += "&filename=" + foldername;
@@ -291,8 +299,8 @@ function renameFolder(event, foldername){
 function renameFile(event, filename) {
     let newFilename = prompt("Give new filename", filename);
     let path = getCurrentDirectory();
-        
-    newFilename = newFilename.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi,"");
+
+    newFilename = newFilename.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
 
     let url = "./rename/?path=" + path;
     url += "&filename=" + filename;
@@ -314,7 +322,7 @@ function downloadFile(event, filename) {
 }
 
 function deletFile(event, filename) {
-    if( confirm("This file/folder will be deleted!") ){
+    if (confirm("This file/folder will be deleted!")) {
         let path = getCurrentDirectory();
 
         let url = "./delete/?path=" + path;
