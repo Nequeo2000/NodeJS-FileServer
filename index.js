@@ -15,6 +15,7 @@ fileSelect.onchange = () => {
         url += "&path=/" + getCurrentDirectory();
 
         let req = new XMLHttpRequest();
+        req.timeout = 0;
         req.upload.onloadstart = (event) => {
             progressBar.max += event.total;
             progressBar.hidden = false;
