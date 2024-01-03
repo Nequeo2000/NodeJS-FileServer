@@ -179,11 +179,12 @@ function deleteFile(req, res, qo) {
 function createNewFolder(req, res, qo) {
     let folderPath = rootFolder + qo.path + "/" + qo.foldername;
     fs.mkdir(folderPath, { recursive: false }, (err) => {
-        console.error("error while creating folder\n" + err);
-        return;
+        if ( err ){
+            console.error("error while creating folder\n" + err);
+        } else {
+            console.log("created folder : " + folderPath);
+        }
     });
-
-    console.log("created folder : " + folderPath);
 }
 
 function sendDir(req, res, qo) {
