@@ -17,21 +17,15 @@ fileSelect.onchange = () => {
         let req = new XMLHttpRequest();
         req.timeout = 0;
         req.upload.onloadstart = (event) => {
-            progressBar.max += event.total;
+            progressBar.max = event.total;
             progressBar.hidden = false;
         }
         req.upload.onloadend = (event) => {
-            if (progressBar.max == progressBar.value
-                && progressBar.hidden == false) {
-                progressBar.hidden = true;
-                updatePage();
-
-                progressBar.value = 0;
-                progressBar.max = 0;
-            }
+            progressBar.hidden = true;
+            updatePage();
         }
         req.upload.onprogress = (event) => {
-            progressBar.value += event.loaded;
+            progressBar.value = event.loaded;
         };
         req.upload.onabort = (event) => { window.alert(event); }
         req.upload.onerror = (event) => { window.alert(event); }
