@@ -24,7 +24,7 @@ nav {
     border-bottom-right-radius: 10px;
 
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-columns: 50px 1fr 50px;
 }
 
 .navElementLeft,
@@ -32,8 +32,8 @@ nav {
 .navElementRight {
     position: relative;
     height: inherit;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .navElementLeft .newFolder {
@@ -45,6 +45,17 @@ nav {
 .newFolder,
 .newFolder img {
     height: inherit;
+    border-radius: 10px;
+}
+
+.progressBar {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    color: white;
+    background-color: gray;
+    
     border-radius: 10px;
 }
 
@@ -61,15 +72,6 @@ nav {
 .upload img {
     height: inherit;
     border-radius: 10px;
-}
-
-.progressBar {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-
-    color: white;
-    background-color: gray;
 }
 
 .displayContainer {
