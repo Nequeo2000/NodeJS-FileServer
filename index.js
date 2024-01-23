@@ -88,6 +88,8 @@ function createFileElements(filenames) {
             updatePage();
         };
         backBtn.children[1].src = "./back.png";
+        backBtn.children[3].innerHTML="";
+        backBtn.removeChild(backBtn.children[3]);
     }
 
     for (let i = 0; i < filenames.length; i++) {
