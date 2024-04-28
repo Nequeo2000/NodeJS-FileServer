@@ -129,13 +129,8 @@ function uploadToServer(req, res, qo) {
     let writeStream = fs.createWriteStream(`${rootFolder}${qo.path}${filename}`, { highWaterMark: 1000 * 1024 });
     console.log("UPLOAD : " + filename);
 
-    let highWaterMark = true;
     req.on('data', (chunk) => {
-        if (!highWaterMark)
-            writeStream.cork();
         highWaterMark = writeStream.write(chunk, () => { });
-        if (!highWaterMark)
-            writeStream.uncork();
     });
 
     req.on('end', () => {
