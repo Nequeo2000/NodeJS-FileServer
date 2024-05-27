@@ -26,7 +26,8 @@ const server = http.createServer((req, res) => {
         }
         else if (req.url == "/index.css"
             || req.url == "/index.js"
-            || req.url == "/manifest.json") {
+            || req.url == "/manifest.json"
+            || req.url == "/customElements/fileElement.js") {
             fs.readFile("." + req.url, null, function (error, data) {
                 res.setHeader('Content-Type', 'text');
                 res.write(data.toString());

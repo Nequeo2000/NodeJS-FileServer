@@ -4,7 +4,7 @@
     "icons": [
         {
             "src": "./folder.png",
-            "sizes": "500x500"
+            "sizes": "50x50"
         }
     ],
     "start_url": "./",

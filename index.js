@@ -94,13 +94,16 @@ function createFileElements(filenames) {
 
     for (let i = 0; i < filenames.length; i++) {
         let filename = filenames[i];
-        let fileType = filename.toLowerCase().split(".")[1];
+        let filetype = filename.toLowerCase().split(".")[1];
 
-        if (fileType == undefined) {
+        if (filetype == undefined) {
             createFolder(filename);
         }
         else {
-            createFile(filename, fileType);
+            let fileElement = document.createElement("file-element");
+            fileElement.setAttribute("filename", filename);
+            fileElement.setAttribute("filetype", filetype);
+            document.getElementsByClassName("fileList")[0].appendChild(fileElement);
         }
     }
 }
@@ -153,123 +156,6 @@ function createFolder(foldername) {
     };
 
     return element;
-}
-
-function createFile(filename, fileType) {
-    let element = document.createElement("div");
-    element.className = "listElement file";
-    element.tabIndex = 0;
-    document.getElementsByClassName("fileList")[0].appendChild(element);
-
-    let p = document.createElement("p");
-    let img = document.createElement("img");
-    p.innerText = filename;
-    img.src = "./file.png";
-    element.appendChild(p);
-    element.appendChild(img);
-
-    let checkbox = document.createElement("input");
-    checkbox.tabIndex = -1;
-    checkbox.type = "checkbox";
-    checkbox.className = "toggle";
-    checkbox.id = filename;
-    checkbox.onclick = (event) => { event.stopPropagation(); };
-    element.appendChild(checkbox);
-
-    let optionsLabel = document.createElement("label");
-    optionsLabel.tabIndex = 0;
-    optionsLabel.className = "optionsLabel";
-    optionsLabel.innerHTML = `
-        <img src="./options.png"></img>
-        <div class="optionsDisplay"></div>
-    `;
-    optionsLabel.htmlFor = filename;
-    optionsLabel.onclick = (event) => { event.stopPropagation(); };
-    element.appendChild(optionsLabel);
-
-    let downloadBtn = document.createElement("button");
-    downloadBtn.onclick = () => downloadFile(event, filename);
-    downloadBtn.innerHTML = "Download";
-    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(downloadBtn);
-
-    let renameBtn = document.createElement("button");
-    renameBtn.onclick = () => renameFile(event, filename);
-    renameBtn.innerHTML = "Rename";
-    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
-
-    let deleteBtn = document.createElement("button");
-    deleteBtn.onclick = () => deletFile(event, filename);
-    deleteBtn.innerHTML = "Delete";
-    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
-
-    // give onclick functions according to filetype
-    if (fileType == "mp4"
-        || fileType == "ogg"
-        || fileType == "webm") {
-        element.onclick = () => {
-            let videoDisplay = document.createElement("video");
-            videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + filename;
-            videoDisplay.autoplay = true;
-            videoDisplay.controls = true;
-
-            let displayArea = document.getElementById("displayArea");
-            displayArea.innerHTML = "";
-            displayArea.appendChild(videoDisplay);
-        };
-    }
-    else if (fileType == "apng"
-        || fileType == "gif"
-        || fileType == "ico"
-        || fileType == "cur"
-        || fileType == "jpg"
-        || fileType == "jpeg"
-        || fileType == "jfif"
-        || fileType == "pipeg"
-        || fileType == "pjp"
-        || fileType == "png"
-        || fileType == "svg") {
-        element.onclick = () => {
-            let imageDisplay = document.createElement("img");
-            imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
-
-            let displayArea = document.getElementById("displayArea");
-            displayArea.innerHTML = "";
-            displayArea.appendChild(imageDisplay);
-        };
-    }
-    else if (fileType == "mp3"
-        || fileType == "wav") {
-        element.onclick = () => {
-            let audioDisplay = document.createElement("audio");
-            audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
-            audioDisplay.controls = true;
-            audioDisplay.autoplay = true;
-
-            let displayArea = document.getElementById("displayArea");
-            displayArea.innerHTML = "";
-            displayArea.appendChild(audioDisplay);
-        };
-    }
-    else if (fileType == "pdf"
-        || fileType == "txt"
-        || fileType == "py"
-        || fileType == "java"
-        || fileType == "css"
-        || fileType == "js") {
-        element.onclick = () => {
-            let pdfDisplay = document.createElement("iframe");
-            pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
-
-            let displayArea = document.getElementById("displayArea");
-            displayArea.innerHTML = "";
-            displayArea.appendChild(pdfDisplay);
-        };
-    }
-    else {
-        element.onclick = () => {
-            alert("Displaying this file type is not supported");
-        };
-    }
 }
 
 function renameFolder(event, foldername) {
