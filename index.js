@@ -80,16 +80,16 @@ function getCurrentDirectory() {
 
 function createFileElements(filenames) {
     document.getElementsByClassName("fileList")[0].innerHTML = "";
-
+    
     if (currDir.length > 0) {
-        let backBtn = createFolder("Back");
-        backBtn.onclick = () => {
+        let backButton = document.createElement("folder-element");
+        backButton.setAttribute("foldername", "Back");
+        backButton.setAttribute("img", "./back.png");
+        backButton.onclick = (event) => {
             currDir.pop();
             updatePage();
         };
-        backBtn.children[1].src = "./back.png";
-        backBtn.children[3].innerHTML="";
-        backBtn.removeChild(backBtn.children[3]);
+        document.getElementsByClassName("fileList")[0].appendChild(backButton);
     }
 
     for (let i = 0; i < filenames.length; i++) {
@@ -97,7 +97,13 @@ function createFileElements(filenames) {
         let filetype = filename.toLowerCase().split(".")[1];
 
         if (filetype == undefined) {
-            createFolder(filename);
+            let fileElement = document.createElement("folder-element");
+            fileElement.setAttribute("foldername", filename);
+            fileElement.onclick = (event)=>{
+                currDir.push("/" + filename);
+                updatePage();
+            };
+            document.getElementsByClassName("fileList")[0].appendChild(fileElement);
         }
         else {
             let fileElement = document.createElement("file-element");
@@ -106,56 +112,6 @@ function createFileElements(filenames) {
             document.getElementsByClassName("fileList")[0].appendChild(fileElement);
         }
     }
-}
-
-function createFolder(foldername) {
-    let element = document.createElement("div");
-    element.className = "listElement folder";
-    element.tabIndex = 0;
-    document.getElementsByClassName("fileList")[0].appendChild(element);
-
-    let p = document.createElement("p");
-    let img = document.createElement("img");
-    p.innerText = foldername;
-    img.src = "./folder.png";
-    element.appendChild(p);
-    element.appendChild(img);
-
-    let checkbox = document.createElement("input");
-    checkbox.tabIndex = -1;
-    checkbox.type = "checkbox";
-    checkbox.className = "toggle";
-    checkbox.id = foldername;
-    checkbox.onclick = (event) => { event.stopPropagation(); };
-    element.appendChild(checkbox);
-
-    let optionsLabel = document.createElement("label");
-    optionsLabel.tabIndex = 0;
-    optionsLabel.className = "optionsLabel";
-    optionsLabel.innerHTML = `
-        <img src="./options.png"></img>
-        <div class="optionsDisplay"></div>
-    `;
-    optionsLabel.htmlFor = foldername;
-    optionsLabel.onclick = (event) => { event.stopPropagation(); };
-    element.appendChild(optionsLabel);
-
-    let renameBtn = document.createElement("button");
-    renameBtn.onclick = () => renameFolder(event, foldername);
-    renameBtn.innerHTML = "Rename";
-    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(renameBtn);
-
-    let deleteBtn = document.createElement("button");
-    deleteBtn.onclick = () => deletFile(event, foldername);
-    deleteBtn.innerHTML = "Delete";
-    optionsLabel.getElementsByClassName("optionsDisplay")[0].appendChild(deleteBtn);
-
-    element.onclick = () => {
-        currDir.push("/" + foldername);
-        updatePage();
-    };
-
-    return element;
 }
 
 function renameFolder(event, foldername) {

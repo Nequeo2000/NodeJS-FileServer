@@ -10,8 +10,9 @@ class FileElement extends HTMLElement {
             <img src="./options.png">
         `;
 
-        this.configureFileClickEvent(this.getAttribute("filename"), this.getAttribute("filetype"));
+        this._configureFileClickEvent(this.getAttribute("filename"), this.getAttribute("filetype"));
 
+        // options button event
         this.children[2].onclick = (event)=>{
             event.stopPropagation();
         };
@@ -57,7 +58,7 @@ class FileElement extends HTMLElement {
 
     }
 
-    configureFileClickEvent(filename, filetype) {
+    _configureFileClickEvent(filename, filetype) {
         if (filetype == "mp4"
             || filetype == "ogg"
             || filetype == "webm") {
