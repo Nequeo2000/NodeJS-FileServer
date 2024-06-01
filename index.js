@@ -85,6 +85,7 @@ function createFileElements(filenames) {
         let backButton = document.createElement("folder-element");
         backButton.setAttribute("foldername", "Back");
         backButton.setAttribute("img", "./back.png");
+        backButton.setAttribute("options", "");
         backButton.onclick = (event) => {
             currDir.pop();
             updatePage();
@@ -150,8 +151,6 @@ function downloadFile(event, filename) {
     a.target = "_self";
     a.download = filename;
     a.click();
-
-    event.stopPropagation();
 }
 
 function deletFile(event, filename) {

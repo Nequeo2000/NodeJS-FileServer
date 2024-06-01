@@ -6,13 +6,48 @@ class FolderElement extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
             <p>${this.getAttribute("foldername")}</p>
-            <img src="${(this.getAttribute("img") ? this.getAttribute("img") : "./folder.png")}">
-            <img src="./options.png">
+            <img src="${this.getAttribute("img") ? this.getAttribute("img") : "./folder.png"}">
+            <img src="./options.png" ${this.getAttribute("options") == "" ? "hidden" : ""}>
         `;
-
+        
         // options button event
         this.children[2].onclick = (event)=>{
             event.stopPropagation();
+
+            let optionsBackground = document.createElement("div");
+            optionsBackground.className = "optionsBackground";
+            optionsBackground.innerHTML = `
+                <div style="
+                        display:grid;
+                        grid-template-columns: 1fr 1fr;
+                        width:200px;
+                        margin: auto;
+                        margin-top: 30%;
+                        background-color: rgba(50,50,50,0.7);">
+                    <img src="./rename.png" style="width:100px; height:100px;"></img>
+                    <img src="./delete.png" style="width:100px; height:100px;"></img>
+                </div>
+            `;
+            optionsBackground.onclick = (event) => {
+                let e = event.target.closest(".optionsBackground");
+                console.log(e);
+                document.body.removeChild(e);
+                event.preventDefault();
+            };
+            document.body.appendChild(optionsBackground);
+
+            optionsBackground.style.setProperty("position", "absolute");
+            optionsBackground.style.setProperty("inset", "0");
+            optionsBackground.style.setProperty("padding", "0");
+            optionsBackground.style.setProperty("margin", "0");
+            optionsBackground.style.setProperty("width", "100%");
+            optionsBackground.style.setProperty("height", "100%");
+            optionsBackground.style.setProperty("background-color", "rgba(100,100,100,0.7)");
+
+            let renameBtn = optionsBackground.children[0].children[0];
+            renameBtn.onclick = (event) => renameFile(event, this.getAttribute("foldername"));
+            let deleteBtn = optionsBackground.children[0].children[1];
+            deleteBtn.onclick = (event) => deletFile(event, this.getAttribute("foldername"));
         };
 
         this.style.setProperty("background-color", "rgb(100,100,100)");
@@ -53,7 +88,7 @@ class FolderElement extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
+
     }
 }
 window.customElements.define("folder-element", FolderElement);

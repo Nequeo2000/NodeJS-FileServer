@@ -15,6 +15,43 @@ class FileElement extends HTMLElement {
         // options button event
         this.children[2].onclick = (event)=>{
             event.stopPropagation();
+
+            let optionsBackground = document.createElement("div");
+            optionsBackground.className = "optionsBackground";
+            optionsBackground.innerHTML = `
+                <div style="
+                        display:grid;
+                        grid-template-columns: 1fr 1fr;
+                        width:200px;
+                        margin: auto;
+                        margin-top: 30%;
+                        background-color: rgba(50,50,50,0.7);">
+                    <img src="./rename.png" style="width:100px; height:100px;"></img>
+                    <img src="./delete.png" style="width:100px; height:100px;"></img>
+                    <img src="./download.png" style="width:100px; height:100px;"></img>
+                </div>
+            `;
+            optionsBackground.onclick = (event) => {
+                document.body.removeChild(event.target.closest(".optionsBackground"));
+                event.preventDefault();
+            };
+            document.body.appendChild(optionsBackground);
+
+            optionsBackground.style.setProperty("position", "absolute");
+            optionsBackground.style.setProperty("inset", "0");
+            optionsBackground.style.setProperty("padding", "0");
+            optionsBackground.style.setProperty("margin", "0");
+            optionsBackground.style.setProperty("width", "100%");
+            optionsBackground.style.setProperty("height", "100%");
+            optionsBackground.style.setProperty("background-color", "rgba(100,100,100,0.7)");
+
+            // options event listeners
+            let renameBtn = optionsBackground.children[0].children[0];
+            renameBtn.onclick = (event) => renameFolder(event, this.getAttribute("filename"));
+            let deleteBtn = optionsBackground.children[0].children[1];
+            deleteBtn.onclick = (event) => deletFile(event, this.getAttribute("filename"));
+            let downloadBtn = optionsBackground.children[0].children[2];
+            downloadBtn.onclick = (event) => downloadFile(event, this.getAttribute("filename"));
         };
 
         this.style.setProperty("background-color", "rgb(100,100,100)");
