@@ -95,9 +95,9 @@ function createFileElements(filenames) {
 
     for (let i = 0; i < filenames.length; i++) {
         let filename = filenames[i];
-        let filetype = filename.toLowerCase().split(".")[1];
+        let filetype = filename.toLowerCase().substring(filename.lastIndexOf(".")+1);
 
-        if (filetype == undefined) {
+        if (filename.indexOf(".") == -1) {
             let fileElement = document.createElement("folder-element");
             fileElement.setAttribute("foldername", filename);
             fileElement.onclick = (event)=>{
