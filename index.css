@@ -1,9 +1,12 @@
 :root{
     --navbar-height: 50px;
+    --default-color: rgb(50, 50, 50);
+    --default-navbar-color: rgb(30, 30, 30);
+    --default-button-color: rgb(100, 100, 100);
 }
 
 body {
-    background-color: rgb(50, 50, 50);
+    background-color: var(--default-color);
 }
 
 button {
@@ -17,18 +20,26 @@ iframe {
     border: none;
 }
 
-nav {
+.navbarContainer{
     margin-top: -8px;
 
-    background-color: rgb(30, 30, 30);
     width: 100%;
-    height: var(--navbar-height);
-
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-
     position: fixed;
     z-index: 1;
+    
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+}
+
+nav {
+    background-color: var(--default-navbar-color);
+    width: 100%;
+    height: var(--navbar-height);
+    
+    z-index: inherit;
     display: grid;
     grid-template-columns: 50px 1fr 50px;
 }
@@ -43,7 +54,7 @@ nav {
 }
 
 .navElementLeft .newFolder {
-    background-color: rgb(100, 100, 100);
+    background-color: var(--default-button-color);
     padding: 0;
     border: none;
 }
@@ -66,10 +77,10 @@ nav {
 }
 
 .navElementRight .upload {
-    background-color: rgb(100, 100, 100);
+    background-color: var(--default-button-color);
     padding: 0;
     border: none;
-
+    
     position: absolute;
     right: 0px;
 }
@@ -81,8 +92,9 @@ nav {
 }
 
 .displayContainer {
+    z-index: inherit;
     text-align: center;
-    padding-top: var(--navbar-height);
+    background-color: var(--default-navbar-color);
 }
 
 .toggle {
@@ -96,8 +108,11 @@ nav {
 .displayArea video,
 .displayArea img,
 .displayArea audio,
+.displayArea p,
 .displayArea iframe {
     width: 100%;
+    color: white;
+    margin: 0;
 }
 
 .toggleLabel .toggleLabelImage {
@@ -121,6 +136,7 @@ nav {
 .fileList {
     width: 100%;
     margin-top: 8px;
+    padding-top: calc(2*var(--navbar-height));
     
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));

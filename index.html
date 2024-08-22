@@ -8,31 +8,33 @@
 </head>
 
 <body>
-	<nav>
-		<div class="navElementLeft">
-			<button class="newFolder">
-				<img src="./add.png">
-			</button>
+	<div class="navbarContainer">
+		<nav>
+			<div class="navElementLeft">
+				<button class="newFolder">
+					<img src="./add.png">
+				</button>
+			</div>
+			<div class="navElementCenter">
+				<progress class="progressBar" id="progess" max="100" value="0" hidden></progress>
+			</div>
+			<div class="navElementRight">
+				<button class="upload">
+					<img src="./upload.png">
+				</button>
+			</div>
+		</nav>
+		<div class="displayContainer">
+			<input type="checkbox" checked class="toggleDisplay toggle" id="toggleDisplay">
+			<div class="displayArea" id="displayArea">
+				<p>Click on a file to display its contents</p>
+			</div>
+			<label class="toggleLabel" for="toggleDisplay">
+				<img class="toggleLabelImage" src="./triangle.png">
+			</label>
 		</div>
-		<div class="navElementCenter">
-			<progress class="progressBar" id="progess" max="100" value="0" hidden></progress>
-		</div>
-		<div class="navElementRight">
-			<button class="upload">
-				<img src="./upload.png">
-			</button>
-		</div>
-	</nav>
-	<!---->
-	<div class="displayContainer">
-		<input type="checkbox" class="toggleDisplay toggle" id="toggleDisplay">
-		<div class="displayArea" id="displayArea">
-			<p>Click on a file to display its contents</p>
-		</div>
-		<label class="toggleLabel" for="toggleDisplay">
-			<img class="toggleLabelImage" src="./triangle.png">
-		</label>
 	</div>
+	<!---->
 	<div class="fileList"></div>
 	<input type="file" name="" id="select" hidden>
 	<script src="./index.js"></script>
