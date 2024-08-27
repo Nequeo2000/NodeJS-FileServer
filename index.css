@@ -125,8 +125,11 @@ nav {
 
 .toggleDisplay:checked~.displayArea {
     height: 0;
-    transition: height 1s ease-in-out;
     visibility: hidden;
+}
+
+.toggleDisplay~.displayArea {
+    overflow-y: scroll;
 }
 
 .toggleLabelImage {

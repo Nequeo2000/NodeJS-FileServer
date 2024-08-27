@@ -8,29 +8,34 @@ let progressBar = document.getElementById("progess");
 let currDir = [];
 
 fileSelect.onchange = () => {
-    let file = fileSelect.files[0];
-    file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 .'()]/gi, ""), { type: file.type });
-    let url = rootURL + "fileupload/?filename=/" + file.name;
-    url += "&path=" + getCurrentDirectory();
+    let files = fileSelect.files;
+    let makeReq = function (file) {
+        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 .'()]/gi, ""), { type: file.type });
+        let url = rootURL + "fileupload/?filename=/" + file.name;
+        url += "&path=" + getCurrentDirectory();
 
-    let req = new XMLHttpRequest();
-    req.timeout = 0;
-    req.upload.onloadstart = (event) => {
-        progressBar.max = event.total;
-        progressBar.hidden = false;
-    }
-    req.upload.onloadend = (event) => {
-        progressBar.hidden = true;
-        updatePage();
-    }
-    req.upload.onprogress = (event) => {
-        progressBar.value = event.loaded;
-    };
-    req.upload.onabort = (event) => { window.alert("Upload aborted"); console.log(event); }
-    req.upload.onerror = (event) => { window.alert("Upload failed"); console.log(event); }
+        let req = new XMLHttpRequest();
+        req.timeout = 0;
+        req.upload.onloadstart = (event) => {
+            progressBar.max = event.total;
+            progressBar.hidden = false;
+        }
+        req.upload.onloadend = (event) => {
+            progressBar.hidden = true;
+            updatePage();
+        }
+        req.upload.onprogress = (event) => {
+            progressBar.value = event.loaded;
+        };
+        req.upload.onabort = (event) => { window.alert(event); }
+        req.upload.onerror = (event) => { window.alert(event); }
 
-    req.open("POST", url, true);
-    req.send(file);
+        req.open("POST", url, true);
+        req.send(file);
+    }
+    for (let i = 0; i < files.length; i++) {
+        makeReq(files[i]);
+    }
 }
 
 upload.onclick = () => {
