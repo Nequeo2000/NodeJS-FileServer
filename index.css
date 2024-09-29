@@ -99,7 +99,7 @@ nav {
 }
 
 .displayArea {
-	max-height: calc(var(--navbar-height)*5);
+    height: calc(var(--navbar-height)*5);
 }
 
 .toggle {
@@ -134,7 +134,7 @@ nav {
 }
 
 .toggleDisplay~.displayArea {
-    overflow-y: scroll;
+    overflow-x: scroll;
 }
 
 .toggleLabelImage {
