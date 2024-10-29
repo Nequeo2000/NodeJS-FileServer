@@ -116,6 +116,9 @@ function renameFolder(event, foldername) {
     let newFoldername = prompt("Give new filename", foldername);
     let path = "/" + getCurrentDirectory();
 
+    if(!newFoldername)
+        return;
+
     let url = "./rename/?path=" + path;
     url += "&filename=" + encodeURI(foldername);
     url += "&newFilename=" + encodeURI(newFoldername);
@@ -129,6 +132,9 @@ function renameFile(event, filename) {
     let newFilename = prompt("Give new filename", filename);
     let path = getCurrentDirectory();
     console.log(newFilename);
+
+    if(!newFilename)
+        return;
 
     let url = "./rename/?path=" + path;
     url += "&filename=" + encodeURI(filename);
