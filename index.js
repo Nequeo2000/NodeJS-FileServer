@@ -10,8 +10,8 @@ let currDir = [];
 fileSelect.onchange = () => {
     let files = fileSelect.files;
     let makeReq = function (file) {
-        file = new File([file], file.name.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 .'()]/gi, ""), { type: file.type });
-        let url = rootURL + "fileupload/?filename=/" + file.name;
+        file = new File([file], encodeURI(file.name), { type: file.type });
+        let url = rootURL + "fileupload/?filename=/" + encodeURI(file.name);
         url += "&path=" + getCurrentDirectory();
 
         let req = new XMLHttpRequest();
@@ -44,17 +44,9 @@ upload.onclick = () => {
 
 newFolder.onclick = () => {
     let foldername = prompt("folder name");
-    foldername = foldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
 
     // if no name given, return
     if (foldername == null) {
-        return;
-    }
-
-    // check for illegal characters
-    if (foldername.indexOf("&") != -1
-        || foldername.indexOf(".") != -1) {
-        alert("This name contains unusable characters ('.','&')")
         return;
     }
 
@@ -69,7 +61,7 @@ newFolder.onclick = () => {
     }
 
     let url = rootURL + "newFolder/?path=" + getCurrentDirectory();
-    url += "&foldername=" + foldername;
+    url += "&foldername=" + encodeURI(foldername);
     fetch(url, { method: "POST" })
         .catch(err => console.log(err));
     updatePage();
@@ -106,7 +98,7 @@ function createFileElements(filenames) {
             let fileElement = document.createElement("folder-element");
             fileElement.setAttribute("foldername", filename);
             fileElement.onclick = (event)=>{
-                currDir.push("/" + filename);
+                currDir.push("/" + encodeURI(filename));
                 updatePage();
             };
             document.getElementsByClassName("fileList")[0].appendChild(fileElement);
@@ -124,11 +116,9 @@ function renameFolder(event, foldername) {
     let newFoldername = prompt("Give new filename", foldername);
     let path = "/" + getCurrentDirectory();
 
-    newFoldername = newFoldername.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
-
     let url = "./rename/?path=" + path;
-    url += "&filename=" + foldername;
-    url += "&newFilename=" + newFoldername;
+    url += "&filename=" + encodeURI(foldername);
+    url += "&newFilename=" + encodeURI(newFoldername);
 
     fetch(url, { method: "POST" })
         .then(() => { updatePage() })
@@ -138,12 +128,11 @@ function renameFolder(event, foldername) {
 function renameFile(event, filename) {
     let newFilename = prompt("Give new filename", filename);
     let path = getCurrentDirectory();
-
-    newFilename = newFilename.replace(/(?!0)[^abcdefghijklmnopqrstuvwxyz0123456789 ."'()\b]/gi, "");
+    console.log(newFilename);
 
     let url = "./rename/?path=" + path;
-    url += "&filename=" + filename;
-    url += "&newFilename=" + newFilename;
+    url += "&filename=" + encodeURI(filename);
+    url += "&newFilename=" + encodeURI(newFilename);
 
     fetch(url, { method: "POST" })
         .then(() => { updatePage() })
@@ -152,7 +141,7 @@ function renameFile(event, filename) {
 
 function downloadFile(event, filename) {
     let a = document.createElement("a");
-    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
+    a.href = rootURL + "_data_/?path=" + getCurrentDirectory() + "/" + encodeURI(filename);
     a.target = "_self";
     a.download = filename;
     a.click();
@@ -163,7 +152,7 @@ function deletFile(event, filename) {
         let path = getCurrentDirectory();
 
         let url = "./delete/?path=" + path;
-        url += "&filename=" + filename;
+        url += "&filename=" + encodeURI(filename);
 
         fetch(url, { method: "POST" })
             .then(() => {

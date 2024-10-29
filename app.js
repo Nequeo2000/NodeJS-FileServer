@@ -118,7 +118,7 @@ function streamVideoFile(req, res, qo) {
 }
 
 function downloadFromServer(req, res, qo) {
-    let filePath = rootFolder + qo.path;
+    let filePath = rootFolder + decodeURI(qo.path);
     let file = fs.statSync(filePath);
 
     res.setHeader('Content-Length', file.size);
@@ -130,7 +130,7 @@ function downloadFromServer(req, res, qo) {
 }
 
 function uploadToServer(req, res, qo) {
-    let filename = qo.filename;
+    let filename = decodeURI(qo.filename);
     let writeStream = fs.createWriteStream(`${rootFolder}${qo.path}${filename}`, { highWaterMark: 1000 * 1024 });
     console.log("UPLOAD : " + filename);
 
@@ -147,8 +147,8 @@ function uploadToServer(req, res, qo) {
 
 function renameFile(req, res, qo) {
     let path = qo.path;
-    let filename = qo.filename;
-    let newFilename = qo.newFilename;
+    let filename = decodeURI(qo.filename);
+    let newFilename = decodeURI(qo.newFilename);
 
     let oldPath = rootFolder + path + "/" + filename;
     let newPath = rootFolder + path + "/" + newFilename;
@@ -165,7 +165,7 @@ function renameFile(req, res, qo) {
 
 function deleteFile(req, res, qo) {
     let path = qo.path;
-    let filename = qo.filename;
+    let filename = decodeURI(qo.filename);
 
     fs.rm(rootFolder + path + "/" + filename, { recursive: true, force: true }, (error) => {
         if (error) {

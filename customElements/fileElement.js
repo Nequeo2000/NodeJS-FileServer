@@ -47,7 +47,7 @@ class FileElement extends HTMLElement {
 
             // options event listeners
             let renameBtn = optionsBackground.children[0].children[0];
-            renameBtn.onclick = (event) => renameFolder(event, this.getAttribute("filename"));
+            renameBtn.onclick = (event) => renameFile(event, this.getAttribute("filename"));
             let deleteBtn = optionsBackground.children[0].children[1];
             deleteBtn.onclick = (event) => deletFile(event, this.getAttribute("filename"));
             let downloadBtn = optionsBackground.children[0].children[2];
@@ -101,7 +101,7 @@ class FileElement extends HTMLElement {
             || filetype == "webm") {
             this.onclick = () => {
                 let videoDisplay = document.createElement("video");
-                videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + filename;
+                videoDisplay.src = window.location.href + "video/?path=" + getCurrentDirectory() + "/" + encodeURI(filename);
                 videoDisplay.autoplay = true;
                 videoDisplay.controls = true;
 
@@ -123,7 +123,7 @@ class FileElement extends HTMLElement {
             || filetype == "svg") {
             this.onclick = () => {
                 let imageDisplay = document.createElement("img");
-                imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
+                imageDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + encodeURI(filename);
 
                 let displayArea = document.getElementById("displayArea");
                 displayArea.innerHTML = "";
@@ -134,7 +134,7 @@ class FileElement extends HTMLElement {
             || filetype == "wav") {
             this.onclick = () => {
                 let audioDisplay = document.createElement("audio");
-                audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
+                audioDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + encodeURI(filename);
                 audioDisplay.controls = true;
                 audioDisplay.autoplay = true;
 
@@ -151,7 +151,7 @@ class FileElement extends HTMLElement {
             || filetype == "js") {
             this.onclick = () => {
                 let pdfDisplay = document.createElement("iframe");
-                pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + filename;
+                pdfDisplay.src = window.location.href + "_data_/?path=" + getCurrentDirectory() + "/" + encodeURI(filename);
 
                 let displayArea = document.getElementById("displayArea");
                 displayArea.innerHTML = "";
