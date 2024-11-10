@@ -7,35 +7,40 @@ let progressBar = document.getElementById("progess");
 
 let currDir = [];
 
-fileSelect.onchange = () => {
-    let files = fileSelect.files;
+fileSelect.onchange = async () => {
     let makeReq = function (file) {
-        file = new File([file], encodeURI(file.name), { type: file.type });
-        let url = rootURL + "fileupload/?filename=/" + encodeURI(file.name);
-        url += "&path=" + getCurrentDirectory();
-
-        let req = new XMLHttpRequest();
-        req.timeout = 0;
-        req.upload.onloadstart = (event) => {
-            progressBar.max = event.total;
-            progressBar.hidden = false;
-        }
-        req.upload.onloadend = (event) => {
-            progressBar.hidden = true;
-            updatePage();
-        }
-        req.upload.onprogress = (event) => {
-            progressBar.value = event.loaded;
-        };
-        req.upload.onabort = (event) => { window.alert(event); }
-        req.upload.onerror = (event) => { window.alert(event); }
-
-        req.open("POST", url, true);
-        req.send(file);
+        return new Promise((resolve, reject)=>{
+            file = new File([file], encodeURI(file.name), { type: file.type });
+            let url = rootURL + "fileupload/?filename=/" + encodeURI(file.name);
+            url += "&path=" + getCurrentDirectory();
+            
+            let req = new XMLHttpRequest();
+            req.timeout = 0;
+            req.upload.onloadstart = (event) => {
+                progressBar.max = event.total;
+                progressBar.hidden = false;
+            }
+            req.upload.onloadend = (event) => {
+                progressBar.hidden = true;
+                resolve();
+                updatePage();
+            }
+            req.upload.onprogress = (event) => {
+                progressBar.value = event.loaded;
+            };
+            req.upload.onabort = (event) => { window.alert(event); }
+            req.upload.onerror = (event) => { window.alert(event); }
+            
+            req.open("POST", url, true);
+            req.send(file);
+        });
     }
+    let files = fileSelect.files;
     for (let i = 0; i < files.length; i++) {
-        makeReq(files[i]);
+        progressBar.nextElementSibling.innerText = (i+1)+"/"+files.length;
+        await makeReq(files[i]);
     }
+    progressBar.nextElementSibling.innerText = "";
 }
 
 upload.onclick = () => {

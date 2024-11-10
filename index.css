@@ -65,7 +65,15 @@ nav {
     border-radius: 10px;
 }
 
-.progressBar {
+.navElementCenter div{
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.navElementCenter progress {
     width: 100%;
     margin: 0;
     padding: 0;
